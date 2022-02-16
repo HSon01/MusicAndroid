@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_detail_song"
+    android:background="@color/list_music"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/bnt_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignStart="@+id/title"
             android:layout_marginStart="8dp"
             android:scaleType="fitXY"
@@ -37,15 +37,6 @@
             android:textColor="@color/textSong"
             android:textSize="16sp"
             android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/bnt_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/title"
-            android:layout_marginEnd="8dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_search" />
     </RelativeLayout>
 
 
@@ -58,12 +49,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top">
-
-        <ImageView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/defaultsong" />
+            android:layout_margin="8dp"
+            app:cardCornerRadius="20dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/defaultsong" />
+        </androidx.cardview.widget.CardView>
+
     </RelativeLayout>
 
     <View

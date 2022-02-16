@@ -20,12 +20,17 @@ import com.ssn.sxmusic.util.Const.ACTION_NEXT
 import com.ssn.sxmusic.util.Const.ACTION_PAUSE
 import com.ssn.sxmusic.util.Const.ACTION_PLAYING
 import com.ssn.sxmusic.util.Const.ACTION_PREVIOUS
+import com.ssn.sxmusic.util.Const.MEDIA_CURRENT_STATE_LOOP
+import com.ssn.sxmusic.util.Const.MEDIA_LOOP_ALL
+import com.ssn.sxmusic.util.Const.MEDIA_LOOP_ONE
+import com.ssn.sxmusic.util.PrefControllerSingleton
 import com.ssn.sxmusic.util.Util
 
 class DetailSong : AppCompatActivity() {
     lateinit var binding: ActivityDetailSongBinding
     private lateinit var seekBar: SeekBar
     private val mBReceiver = SongBReceiver()
+    private val sharedPrefControl = PrefControllerSingleton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +42,7 @@ class DetailSong : AppCompatActivity() {
         seekBar = binding.seekBar
         setStatusButton(MediaController.mediaState)
         MediaController.currentSong?.let { showInfoSong(it) }
+        sharedPrefControl.prefController(this)
     }
 
 
@@ -55,8 +61,7 @@ class DetailSong : AppCompatActivity() {
 
     inner class SongBReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, p1: Intent?) {
-            Log.d("TAG_LOG", "Detail , ${p1?.action}")
-
+            Log.d("TAG_LOG", "DetailSong , ${p1?.action}")
             p1?.action?.let {
                 handleActionMusic()
             }
@@ -86,8 +91,21 @@ class DetailSong : AppCompatActivity() {
         binding.bntPrevious.setOnClickListener {
             sendActionToService(ACTION_PREVIOUS)
         }
-        binding.repeat.setOnClickListener {
 
+        binding.repeat.setOnClickListener {
+            when (sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)) {
+                MEDIA_LOOP_ONE -> {
+                    binding.repeat.setImageResource(R.drawable.ic_repeat)
+                    sharedPrefControl.setMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
+                }
+                MEDIA_LOOP_ALL -> {
+                    binding.repeat.setImageResource(R.drawable.ic_repeat_once)
+                    sharedPrefControl.setMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ONE)
+                }
+            }
+        }
+        binding.love.setOnClickListener {
+            binding.love.setImageResource(R.drawable.ic_favorite_border)
         }
         binding.bntBack.setOnClickListener {
             onBackPressed()
@@ -102,7 +120,10 @@ class DetailSong : AppCompatActivity() {
             .placeholder(R.mipmap.ic_launcher_round)
             .error(R.drawable.defaultsong)
             .into(binding.imageMusic)
-
+        val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
+        if (loop == MEDIA_LOOP_ONE) {
+            binding.repeat.setImageResource(R.drawable.ic_repeat_once)
+        }
         initialiseSeekbar()
     }
 

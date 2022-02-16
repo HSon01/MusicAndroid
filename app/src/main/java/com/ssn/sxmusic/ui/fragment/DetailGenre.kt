@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +37,7 @@ class DetailGenre : Fragment(), OnClickItem {
     }
 
     override fun onClickListener(song: Song) {
-        val intent = Intent(Const.FILTER_SEND_DATA)
+        val intent = Intent(Const.FRAGMENT_SEND_DATA)
         MediaController.setCurrentSong(MediaController.findSongByPosition(song))
         context?.sendBroadcast(intent)
     }
@@ -48,11 +46,6 @@ class DetailGenre : Fragment(), OnClickItem {
         binding.bntBack.setOnClickListener {
             val action = DetailGenreDirections.actionDetailAlbumFragmentToGenreFragment()
             findNavController().navigate(action)
-            val manager: FragmentManager = requireActivity().supportFragmentManager
-            val trans: FragmentTransaction = manager.beginTransaction()
-            trans.remove(requireParentFragment());
-            trans.commit();
-            manager.popBackStack();
         }
     }
 

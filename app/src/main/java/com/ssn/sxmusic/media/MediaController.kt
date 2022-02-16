@@ -4,14 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.os.Bundle
 import android.util.Log
 import com.ssn.sxmusic.model.Song
+import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.MEDIA_IDLE
+import com.ssn.sxmusic.util.Const.MEDIA_LOOP_ALL
 import com.ssn.sxmusic.util.Const.MEDIA_PAUSED
 import com.ssn.sxmusic.util.Const.MEDIA_PLAYING
 import com.ssn.sxmusic.util.Const.MEDIA_STOPPED
 import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
+import com.ssn.sxmusic.util.PrefControllerSingleton
 
 @SuppressLint("StaticFieldLeak")
 object MediaController {
@@ -21,11 +23,11 @@ object MediaController {
     private lateinit var context: Context
     var currentSong: Song? = null
     var mediaState = MEDIA_IDLE
-
+    private val sharedPrefControl = PrefControllerSingleton
 
     fun mediaController(c: Context) {
         context = c
-        currentSong = songs[currentPositionS]
+        sharedPrefControl.prefController(c)
         initMediaPlay()
     }
 
@@ -35,10 +37,13 @@ object MediaController {
     }
 
     private fun initMediaPlay() {
-        Log.d("TAG_LOG", "initMediaPlay")
         mediaPlayer = MediaPlayer()
         mediaPlayer?.setOnCompletionListener {
-            nextSong()
+            if (isLoop()) {
+                playPauseSong(true)
+            } else {
+                nextSong()
+            }
         }
     }
 
@@ -52,7 +57,7 @@ object MediaController {
     fun playPauseSong(
         isNew: Boolean = false,
         nextSong: Boolean = false,
-        previousSong: Boolean = false
+        previousSong: Boolean = false,
     ) {
         val intent = Intent(SERVICE_SEND_DATA)
         val song = currentSong
@@ -65,17 +70,18 @@ object MediaController {
                 mediaState = MEDIA_PLAYING
             } catch (ex: Exception) {
                 songs.removeAt(currentPositionS)
-                if (nextSong) {
-                    nextSong()
-                } else if (previousSong) {
-                    previousSong()
-                } else {
-                    nextSong()
+                when {
+                    nextSong -> {
+                        nextSong()
+                    }
+                    previousSong -> {
+                        previousSong()
+                    }
+                    else -> {
+                        nextSong()
+                    }
                 }
             }
-            val bundle = Bundle()
-            bundle.putSerializable("Song", song)
-            intent.putExtras(bundle)
         } else if (mediaState == MEDIA_PLAYING) {
             mediaPlayer?.pause()
             mediaState = MEDIA_PAUSED
@@ -86,7 +92,7 @@ object MediaController {
         context.sendBroadcast(intent)
     }
 
-    fun getIsPlay(): Int? {
+    fun getIsPlay(): Int {
         return mediaState
     }
 
@@ -132,4 +138,17 @@ object MediaController {
         mediaPlayer?.seekTo(time)
     }
 
+    private fun isLoop(): Boolean {
+        val loop = sharedPrefControl.getMediaLoop(Const.MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
+        Log.d("TAG", "{isLoop} $loop")
+        when (loop) {
+            Const.MEDIA_LOOP_ONE -> {
+                return true
+            }
+            MEDIA_LOOP_ALL -> {
+                return false
+            }
+        }
+        return false
+    }
 }

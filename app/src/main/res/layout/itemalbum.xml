@@ -3,13 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="8dp"
+    >
 
     <ImageView
         android:id="@+id/imv_image_album"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="fitCenter"
+        android:background="@drawable/shapegenre"
         android:src="@drawable/ic_album"
         app:tint="@color/black" />
 
@@ -25,6 +28,7 @@
         android:gravity="center_horizontal"
         android:marqueeRepeatLimit="marquee_forever"
         android:paddingLeft="5dp"
+        android:textColor="@color/textSong"
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:text="Trung Quan Ido" />

@@ -21,7 +21,7 @@ import com.ssn.sxmusic.util.Const.ACTION_NEXT
 import com.ssn.sxmusic.util.Const.ACTION_PAUSE
 import com.ssn.sxmusic.util.Const.ACTION_PLAYING
 import com.ssn.sxmusic.util.Const.ACTION_PREVIOUS
-import com.ssn.sxmusic.util.Const.FILTER_SEND_DATA
+import com.ssn.sxmusic.util.Const.FRAGMENT_SEND_DATA
 import com.ssn.sxmusic.util.Const.ID_APPLICATION
 import com.ssn.sxmusic.util.Const.NOTIFICATION_ID
 import com.ssn.sxmusic.util.Const.REQUEST_CODE_NOTIFICATION
@@ -58,19 +58,17 @@ class MusicService : Service() {
     override fun onCreate() {
         context = this
         mediaController.mediaController(context)
-        Log.d("TAG_LOG", "onCreate Service")
         val intentFilter = IntentFilter()
         intentFilter.addAction(ACTION_CLEAR)
         intentFilter.addAction(ACTION_NEXT)
         intentFilter.addAction(ACTION_PREVIOUS)
         intentFilter.addAction(ACTION_PAUSE)
         intentFilter.addAction(ACTION_PLAYING)
-        intentFilter.addAction(FILTER_SEND_DATA)
+        intentFilter.addAction(FRAGMENT_SEND_DATA)
+        intentFilter.addAction(Const.SERVICE_SEND_DATA)
         registerReceiver(musicB, intentFilter)
-        sendNotification()
         super.onCreate()
     }
-
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -78,9 +76,10 @@ class MusicService : Service() {
     }
 
     private fun sendNotification() {
-        val remoteView = RemoteViews(packageName, R.layout.layout_custom_notification)
-        remoteView.setTextViewText(R.id.titleNotification, mediaController.currentSong?.creator)
-        remoteView.setTextViewText(R.id.messageNotification, mediaController.currentSong?.title)
+        val remoteView = RemoteViews(packageName, R.layout.custom_notification)
+
+        remoteView.setTextViewText(R.id.createSong, mediaController.currentSong?.creator)
+        remoteView.setTextViewText(R.id.titleSong, mediaController.currentSong?.title)
         remoteView.setImageViewResource(R.id.play, R.drawable.ic_pause)
         remoteView.setImageViewResource(R.id.clear, R.drawable.ic_clear)
 
@@ -94,7 +93,7 @@ class MusicService : Service() {
 
         remoteView.setOnClickPendingIntent(R.id.clear, pendingIntent(this, ACTION_CLEAR))
         remoteView.setOnClickPendingIntent(R.id.next, pendingIntent(this, ACTION_NEXT))
-        remoteView.setOnClickPendingIntent(R.id.previouts, pendingIntent(this, ACTION_PREVIOUS))
+        remoteView.setOnClickPendingIntent(R.id.previous, pendingIntent(this, ACTION_PREVIOUS))
 
 
         val noti = NotificationCompat.Builder(this, ID_APPLICATION)
@@ -140,7 +139,7 @@ class MusicService : Service() {
 
     private fun handleActionMusic(Action: String) {
         when (Action) {
-            FILTER_SEND_DATA -> {
+            FRAGMENT_SEND_DATA -> {
                 playSong(true)
                 return
             }
@@ -163,6 +162,10 @@ class MusicService : Service() {
             ACTION_CLEAR -> {
                 stopSelf()
                 mediaController.mediaPlayer?.stop();
+                return
+            }
+            else -> {
+                sendNotification()
                 return
             }
         }

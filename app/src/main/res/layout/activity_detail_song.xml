@@ -11,9 +11,10 @@
         android:id="@+id/top"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/imageMusic"
+        app:layout_constraintBottom_toTopOf="@id/card_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="8dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -31,24 +32,31 @@
             android:layout_height="30dp"
             android:layout_gravity="center_vertical|center_horizontal"
             android:gravity="center"
-            android:text="Now Playing"
+            android:text="@string/now_playing"
             android:textColor="@color/textSong"
             android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
 
-    <ImageView
-        android:id="@+id/imageMusic"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/st"
         app:layout_constraintBottom_toTopOf="@id/infoMusic"
-        app:layout_constraintDimensionRatio="4:3"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top" />
+        app:layout_constraintTop_toBottomOf="@id/top"
+        app:cardCornerRadius="20dp">
+        <ImageView
+            android:id="@+id/imageMusic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/st" />
+    </androidx.cardview.widget.CardView>
+
 
     <LinearLayout
         android:id="@+id/infoMusic"
@@ -56,7 +64,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/guideline2"
-        app:layout_constraintTop_toBottomOf="@id/imageMusic">
+        app:layout_constraintTop_toBottomOf="@id/card_view">
 
 
         <TextView
@@ -101,22 +109,20 @@
         app:layout_constraintEnd_toEndOf="@id/seekBar"
         app:layout_constraintStart_toStartOf="@id/seekBar">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/repeat"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_weight="1"
             android:backgroundTint="@android:color/transparent"
-            android:gravity="right"
             android:src="@drawable/ic_repeat" />
 
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="right"
+        <ImageView
+            android:id="@+id/love"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_weight="1"
-            android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_favorite_border" />
+            android:src="@drawable/ic_favorite" />
 
     </LinearLayout>
 
@@ -129,9 +135,9 @@
         android:progressBackgroundTint="#F5BB00"
         android:thumbTint="#F5BB00"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/imageMusic"
+        app:layout_constraintEnd_toEndOf="@id/card_view"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/imageMusic"
+        app:layout_constraintStart_toStartOf="@id/card_view"
         app:layout_constraintTop_toTopOf="@id/bottom"
         app:layout_constraintVertical_bias="0.432" />
 

@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:textCursorDrawable="@null"
         app:iconifiedByDefault="false"
+        android:layout_margin="8dp"
+        android:background="@drawable/shapebgsearch"
         app:layout_constraintBottom_toTopOf="@+id/list_music"
         app:layout_constraintTop_toTopOf="parent"
         app:queryBackground="@null" />

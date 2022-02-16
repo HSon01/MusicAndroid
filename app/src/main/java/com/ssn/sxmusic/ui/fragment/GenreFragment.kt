@@ -41,14 +41,4 @@ class GenreFragment : Fragment(com.ssn.sxmusic.R.layout.fragment_genre), OnClick
         val action = GenreFragmentDirections.actionGenreFragmentToDetailAlbumFragment(x.name)
         findNavController().navigate(action)
     }
-
-
-    fun onClick(){
-
-    }
-
-
-
-
-
 }
