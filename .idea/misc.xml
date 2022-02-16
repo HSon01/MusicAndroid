@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Do An/MusicAndroid/app/src/main/res/layout/activity_main.xml" value="0.1453804347826087" />
+        <entry key="..\:/Do An/MusicAndroid/app/src/main/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/changebackgroud.xml" value="0.18125" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/custom_ic_circle.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/custom_ic_pause.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/custom_ic_play.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/ic_dynamic.xml" value="0.18125" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/ic_pause.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/ic_play.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/ic_repeat.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/ic_skip.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/drawable/selector_play_pause.xml" value="0.23385416666666667" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/activity_home.xml" value="0.1" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/activity_main.xml" value="0.16" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/activity_popup.xml" value="0.2140625" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/fragment_home.xml" value="0.21067415730337077" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/fragment_listmusic.xml" value="0.22" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/fragment_musics.xml" value="0.2015625" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/fragment_search.xml" value="0.36666666666666664" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/fragment_setting.xml" value="0.36666666666666664" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/fragment_splash.xml" value="0.19882246376811594" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/item_page.xml" value="0.19882246376811594" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/itemmusic.xml" value="0.13125" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/layout_custom_bar.xml" value="0.18229166666666666" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/layout_custom_notification.xml" value="0.1453125" />
+        <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/menu/nav_menu.xml" value="0.2015625" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/changebackgroud.xml" value="0.24635416666666668" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/activity_detail_album.xml" value="0.1421875" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/activity_detail_song.xml" value="0.25" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/activity_home.xml" value="0.1762917933130699" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/activity_popup.xml" value="0.36666666666666664" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/fragment_detail_ablum.xml" value="0.19791666666666666" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/fragment_genre.xml" value="0.36666666666666664" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/fragment_home.xml" value="0.27943840579710144" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/fragment_listmusic.xml" value="0.3541666666666667" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/fragment_settings.xml" value="0.3188405797101449" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/itemalbum.xml" value="0.19791666666666666" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/itemmusic.xml" value="0.2078125" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/menu/bottom_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/menu/nav_menu.xml" value="0.2078125" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

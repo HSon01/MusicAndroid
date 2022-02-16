@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/musicsFragment">
+
+
+    <fragment
+        android:id="@+id/musicsFragment"
+        android:name="com.ssn.sxmusic.ui.fragment.MusicsFragment"
+        android:label="MusicsFragment" />
+
+    <fragment
+        android:id="@+id/genreFragment"
+        android:name="com.ssn.sxmusic.ui.fragment.GenreFragment"
+        android:label="GenreFragment" >
+        <action
+            android:id="@+id/action_genreFragment_to_detailAlbumFragment"
+            app:destination="@id/detailAlbumFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailAlbumFragment"
+        android:name="com.ssn.sxmusic.ui.fragment.DetailGenre"
+        android:label="DetailAlbumFragment" >
+        <argument
+            android:name="genre"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_detailAlbumFragment_to_genreFragment"
+            app:destination="@id/genreFragment" />
+    </fragment>
+
+
+</navigation>
