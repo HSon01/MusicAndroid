@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#282A3D</color>
+    <color name="purple_500">#17B1E0</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="backgroundApp">#FFFAE5</color>
+    <color name="changeColorItem">#807F7A</color>
+    <color name="home">#A8564F</color>
+    <color name="list_music">#1A2028</color>
+    <color name="navigation_bar">#282A3D</color>
+    <color name="textSong">#F3F4F4</color>
+    <color name="background_detail_song">#1A2028</color>
+    <color name="creator_song">#B4B4B5</color>
+</resources>

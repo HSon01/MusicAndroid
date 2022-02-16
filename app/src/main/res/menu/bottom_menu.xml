@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/musicsFragment"
+        android:icon="@drawable/ic_dynamic"
+        android:title="@string/list"
+        app:cnb_iconColor="@color/home" />
+    <item
+        android:id="@+id/genreFragment"
+        android:icon="@drawable/ic_album"
+        android:title="@string/genre"
+        app:cnb_iconColor="@color/home" />
+    <item
+        android:id="@+id/favorites"
+        android:icon="@drawable/ic_favorite"
+        android:title="Favorites"
+        app:cnb_iconColor="@color/home" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings"
+        app:cnb_iconColor="@color/home" />
+</menu>
