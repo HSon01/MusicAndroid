@@ -7,6 +7,9 @@ import android.content.Context
 import java.lang.String
 import java.util.concurrent.TimeUnit
 
+
+
+
 object Util {
     fun isMyServiceRunning(serviceClass: Class<*>, context: Context): Boolean {
         val manager = context.getSystemService(Service.ACTIVITY_SERVICE) as ActivityManager
@@ -26,5 +29,18 @@ object Util {
             TimeUnit.MILLISECONDS.toSeconds(duration) -
                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))
         )
+    }
+
+    fun isRunningActivity(ctx: Context): Boolean {
+        val activityManager = ctx.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val tasks = activityManager.getRunningTasks(Int.MAX_VALUE)
+        for (task in tasks) {
+            if (ctx.packageName.equals(
+                    task.baseActivity!!.packageName,
+                    ignoreCase = true
+                )
+            ) return true
+        }
+        return false
     }
 }

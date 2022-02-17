@@ -5,17 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ismaeldivita.chipnavigation.ChipNavigationBar
 import com.ssn.sxmusic.R
 import com.ssn.sxmusic.databinding.ActivityHomeBinding
@@ -24,27 +20,19 @@ import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.service.MusicService
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_PLAYING
-import com.ssn.sxmusic.util.Const.MEDIA_PLAYING
 import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
+import com.ssn.sxmusic.util.Const.MEDIA_PLAYING as MEDIA_PLAYING1
 
 
 class Home : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
-    private var mSong: Song? = null
     private val mBReceiver = SongBReceiver()
 
     inner class SongBReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, p1: Intent?) {
-            Log.d("TAG_LOG", "Home , ${p1?.action}")
             p1?.action?.let { handleActionMusic(it) }
         }
-    }
-
-
-    override fun onDestroy() {
-        unregisterReceiver(mBReceiver)
-        super.onDestroy()
     }
 
 
@@ -57,10 +45,24 @@ class Home : AppCompatActivity() {
         onclickItem()
     }
 
+    override fun onDestroy() {
+        unregisterReceiver(mBReceiver)
+        super.onDestroy()
+    }
+
     private fun registerReceiver() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(SERVICE_SEND_DATA)
         registerReceiver(mBReceiver, intentFilter)
+    }
+
+
+    override fun onStart() {
+        if (MediaController.mediaState == MEDIA_PLAYING1) {
+            showUi()
+            binding.menuPlay.visibility = View.VISIBLE
+        }
+        super.onStart()
     }
 
 
@@ -69,14 +71,10 @@ class Home : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.findNavController()
         setupActionBarWithNavController(navController)
-        binding.navigationBottom.setupWithNavController(navController)
-
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.navigation_bottom)
         val chipNavigationBar: ChipNavigationBar = findViewById(R.id.navigation_ChipNavigation)
-        chipNavigationBar.setItemSelected(R.id.musicsFragment)
+        chipNavigationBar.setItemSelected(R.id.homeFragment)
         chipNavigationBar.setOnItemSelectedListener { itemId ->
-            bottomNavigationView.selectedItemId = itemId
-            NavigationUI.setupWithNavController(bottomNavigationView, navController)
+            navController.navigate(itemId)
         }
         supportActionBar!!.hide()
         startService()
@@ -101,7 +99,7 @@ class Home : AppCompatActivity() {
 
 
     private fun setStatusButton(isPlay: Int) {
-        if (isPlay == MEDIA_PLAYING) {
+        if (isPlay == MEDIA_PLAYING1) {
             binding.playBtn.setImageResource(R.drawable.ic_pause)
         } else {
             binding.playBtn.setImageResource(R.drawable.ic_play)
@@ -111,7 +109,7 @@ class Home : AppCompatActivity() {
 
     private fun onclickItem() {
         binding.playBtn.setOnClickListener {
-            if (MediaController.mediaState == MEDIA_PLAYING) {
+            if (MediaController.mediaState == MEDIA_PLAYING1) {
                 sendActionToService(Const.ACTION_PAUSE)
             } else {
                 sendActionToService(ACTION_PLAYING)
@@ -129,6 +127,7 @@ class Home : AppCompatActivity() {
         binding.menuPlay.setOnClickListener {
             val int = Intent(this, DetailSong::class.java)
             startActivity(int)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
         }
     }
 
@@ -146,29 +145,17 @@ class Home : AppCompatActivity() {
             .placeholder(R.mipmap.ic_launcher_round)
             .error(R.drawable.defaultsong)
             .into(binding.imageSong)
+        setStatusButton(MediaController.mediaState)
     }
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
         if (count == 0) {
             super.onBackPressed()
-            //additional code
         } else {
             supportFragmentManager.popBackStack()
         }
     }
-
-
-//    fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-//        val manager = this.getSystemService(Service.ACTIVITY_SERVICE) as ActivityManager
-//        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-//            if (serviceClass.name == service.service.className) {
-//                return true
-//            }
-//        }
-//        return false
-//    }
-
 }
 
 

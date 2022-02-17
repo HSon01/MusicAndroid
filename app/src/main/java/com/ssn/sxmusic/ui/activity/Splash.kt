@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ssn.sxmusic.databinding.ActivitySplashBinding
-import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.vm.MusicViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -21,10 +20,11 @@ class Splash : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar!!.hide()
-        musicViewModel.getAllListMusic()
-        musicViewModel.listMusic.observe(this, {
-            MediaController.songs.addAll(it)
-        })
+        musicViewModel.getAllMusic()
+//        musicViewModel.getAllListMusic()
+//        musicViewModel.listMusic.observe(this, {
+//            MediaController.songs.addAll(it)
+//        })
         startHomeActivity()
     }
 

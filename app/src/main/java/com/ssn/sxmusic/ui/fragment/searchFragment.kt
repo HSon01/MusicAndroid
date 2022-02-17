@@ -7,19 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssn.sxmusic.adapter.SongsAdapter
 import com.ssn.sxmusic.databinding.FragmentListmusicBinding
 import com.ssn.sxmusic.media.MediaController
-import com.ssn.sxmusic.media.SongManager
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
+import com.ssn.sxmusic.vm.MusicViewModel
 
-class MusicsFragment : Fragment(), OnClickItem {
+class searchFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentListmusicBinding
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
-    private lateinit var list: ArrayList<Song>
+    private val musicViewModel: MusicViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,15 +32,17 @@ class MusicsFragment : Fragment(), OnClickItem {
         binding.listMusic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.listMusic.adapter = musicAdapter
-        list = SongManager.allSong
-        musicAdapter.setData(list)
-        MediaController.setListSong(list)
+        musicViewModel.getSongs()
+        musicViewModel.listMusic.observe(viewLifecycleOwner, {
+            musicAdapter.setData(it)
+            MediaController.setListSong(it)
+        })
         searchMusic()
         return binding.root
     }
 
-    override fun onClickListener(song: Song) {
-        MediaController.setCurrentSong(MediaController.findSongByPosition(song))
+    override fun onClickListener(Song: Song) {
+        MediaController.setCurrentSong(MediaController.findSongByPosition(Song))
         val intent = Intent(Const.FRAGMENT_SEND_DATA)
         requireActivity().sendBroadcast(intent)
     }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.util.Log
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.MEDIA_IDLE
@@ -139,9 +138,7 @@ object MediaController {
     }
 
     private fun isLoop(): Boolean {
-        val loop = sharedPrefControl.getMediaLoop(Const.MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
-        Log.d("TAG", "{isLoop} $loop")
-        when (loop) {
+        when (sharedPrefControl.getMediaLoop(Const.MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)) {
             Const.MEDIA_LOOP_ONE -> {
                 return true
             }

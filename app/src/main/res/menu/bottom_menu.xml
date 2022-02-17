@@ -1,9 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/musicsFragment"
-        android:icon="@drawable/ic_dynamic"
-        android:title="@string/list"
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
+        app:cnb_iconColor="@color/home" />
+
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
         app:cnb_iconColor="@color/home" />
     <item
         android:id="@+id/genreFragment"
@@ -11,13 +18,9 @@
         android:title="@string/genre"
         app:cnb_iconColor="@color/home" />
     <item
-        android:id="@+id/favorites"
+        android:id="@+id/loveFragment"
         android:icon="@drawable/ic_favorite"
         android:title="Favorites"
         app:cnb_iconColor="@color/home" />
-    <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings"
-        app:cnb_iconColor="@color/home" />
+
 </menu>

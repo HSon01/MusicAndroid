@@ -3,6 +3,7 @@ package com.ssn.sxmusic.service
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.Service
+import android.app.TaskStackBuilder
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -15,6 +16,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.ssn.sxmusic.R
 import com.ssn.sxmusic.media.MediaController
+import com.ssn.sxmusic.ui.activity.DetailSong
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_CLEAR
 import com.ssn.sxmusic.util.Const.ACTION_NEXT
@@ -25,6 +27,8 @@ import com.ssn.sxmusic.util.Const.FRAGMENT_SEND_DATA
 import com.ssn.sxmusic.util.Const.ID_APPLICATION
 import com.ssn.sxmusic.util.Const.NOTIFICATION_ID
 import com.ssn.sxmusic.util.Const.REQUEST_CODE_NOTIFICATION
+import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
+import com.ssn.sxmusic.util.Util
 
 
 //@AndroidEntryPoint
@@ -33,6 +37,9 @@ class MusicService : Service() {
     private lateinit var context: Context
     private var musicB = MusicBroadCast()
     private var binderMusicService = MusicBinder()
+    private lateinit var pendingIntent: PendingIntent
+    private var isTask: Boolean = true
+
 
 //    @Inject
 //    lateinit var notificationChannel: NotificationChannel
@@ -75,6 +82,7 @@ class MusicService : Service() {
         return START_STICKY // Không giữ lại intent
     }
 
+    @SuppressLint("WrongConstant", "UnspecifiedImmutableFlag")
     private fun sendNotification() {
         val remoteView = RemoteViews(packageName, R.layout.custom_notification)
 
@@ -82,6 +90,7 @@ class MusicService : Service() {
         remoteView.setTextViewText(R.id.titleSong, mediaController.currentSong?.title)
         remoteView.setImageViewResource(R.id.play, R.drawable.ic_pause)
         remoteView.setImageViewResource(R.id.clear, R.drawable.ic_clear)
+
 
         if (mediaController.getIsPlay() == Const.MEDIA_PLAYING) {
             remoteView.setOnClickPendingIntent(R.id.play, pendingIntent(this, ACTION_PAUSE))
@@ -95,12 +104,36 @@ class MusicService : Service() {
         remoteView.setOnClickPendingIntent(R.id.next, pendingIntent(this, ACTION_NEXT))
         remoteView.setOnClickPendingIntent(R.id.previous, pendingIntent(this, ACTION_PREVIOUS))
 
+        Log.d("TAG RunningActivity", "${Util.isRunningActivity(context)}")
+
+
+        val resultIntent = Intent(this, DetailSong::class.java)
+        val stackBuilder: TaskStackBuilder = TaskStackBuilder.create(this)
+        stackBuilder.addNextIntentWithParentStack(resultIntent)
+        pendingIntent =
+            stackBuilder.getPendingIntent(
+                REQUEST_CODE_NOTIFICATION,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+
+        // Start DetailSong But Not Activity Back Stack
+//            resultIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            pendingIntent =
+//                PendingIntent.getActivity(
+//                    this,
+//                    REQUEST_CODE_NOTIFICATION,
+//                    resultIntent,
+//                    PendingIntent.FLAG_UPDATE_CURRENT
+//                )
+
 
         val noti = NotificationCompat.Builder(this, ID_APPLICATION)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setCustomContentView(remoteView)
-            .setContentIntent(null)
+            .setContentIntent(pendingIntent)
             .setSound(null)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            noti.setChannelId(notificationChannel.id)
 
@@ -164,7 +197,7 @@ class MusicService : Service() {
                 mediaController.mediaPlayer?.stop();
                 return
             }
-            else -> {
+            SERVICE_SEND_DATA -> {
                 sendNotification()
                 return
             }

@@ -6,32 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssn.sxmusic.adapter.SongsAdapter
-import com.ssn.sxmusic.databinding.FragmentDetailGenreBinding
+import com.ssn.sxmusic.databinding.FragmentHomeBinding
 import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
+import com.ssn.sxmusic.vm.MusicViewModel
 
-class DetailGenre : Fragment(), OnClickItem {
-    private lateinit var binding: FragmentDetailGenreBinding
-    private val args: DetailGenreArgs by navArgs()
+
+class HomeFragment : Fragment(), OnClickItem {
+    private lateinit var binding: FragmentHomeBinding
+    private val musicViewModel: MusicViewModel by viewModels()
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDetailGenreBinding.inflate(inflater, container, false)
-        binding.listMusic.layoutManager =
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.listSong.layoutManager =
             LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
-        binding.listMusic.adapter = musicAdapter
-        binding.title.text = args.genre
-        musicAdapter.setData(MediaController.songs)
-        onClick()
+        binding.listSong.adapter = musicAdapter
+        musicViewModel.getSongs()
+        musicViewModel.listMusic.observe(viewLifecycleOwner, {
+            musicAdapter.setData(it)
+            MediaController.setListSong(it)
+        })
+
         return binding.root
     }
 
@@ -40,14 +43,5 @@ class DetailGenre : Fragment(), OnClickItem {
         MediaController.setCurrentSong(MediaController.findSongByPosition(song))
         context?.sendBroadcast(intent)
     }
-
-    fun onClick(){
-        binding.bntBack.setOnClickListener {
-            val action = DetailGenreDirections.actionDetailAlbumFragmentToGenreFragment()
-            findNavController().navigate(action)
-        }
-    }
-
-
 
 }

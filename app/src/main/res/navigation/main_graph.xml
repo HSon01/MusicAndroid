@@ -3,32 +3,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_graph"
-    app:startDestination="@id/musicsFragment">
+    app:startDestination="@id/homeFragment">
 
-
-    <fragment
-        android:id="@+id/musicsFragment"
-        android:name="com.ssn.sxmusic.ui.fragment.MusicsFragment"
-        android:label="MusicsFragment" />
 
     <fragment
         android:id="@+id/genreFragment"
         android:name="com.ssn.sxmusic.ui.fragment.GenreFragment"
-        android:label="GenreFragment" >
+        android:label="GenreFragment">
         <action
             android:id="@+id/action_genreFragment_to_detailAlbumFragment"
             app:destination="@id/detailAlbumFragment" />
+        <action
+            android:id="@+id/action_genreFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_genreFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_genreFragment_to_loveFragment"
+            app:destination="@id/loveFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailAlbumFragment"
         android:name="com.ssn.sxmusic.ui.fragment.DetailGenre"
-        android:label="DetailAlbumFragment" >
+        android:label="DetailAlbumFragment">
         <argument
             android:name="genre"
             app:argType="string" />
         <action
             android:id="@+id/action_detailAlbumFragment_to_genreFragment"
             app:destination="@id/genreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loveFragment"
+        android:name="com.ssn.sxmusic.ui.fragment.LoveFragment"
+        android:label="fragment_love"
+        tools:layout="@layout/fragment_love" >
+        <action
+            android:id="@+id/action_loveFragment_to_genreFragment"
+            app:destination="@id/genreFragment" />
+        <action
+            android:id="@+id/action_loveFragment_to_homeFragment2"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_loveFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.ssn.sxmusic.ui.fragment.searchFragment"
+        android:label="searchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_genreFragment"
+            app:destination="@id/genreFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_loveFragment"
+            app:destination="@id/loveFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.ssn.sxmusic.ui.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_genreFragment"
+            app:destination="@id/genreFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_loveFragment2"
+            app:destination="@id/loveFragment" />
     </fragment>
 
 

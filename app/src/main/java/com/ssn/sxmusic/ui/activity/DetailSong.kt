@@ -34,7 +34,8 @@ class DetailSong : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+        Log.d("TAG_LOG", "DetailSong , onCreate")
+//
         binding = ActivityDetailSongBinding.inflate(layoutInflater)
         setContentView(binding.root)
         onclickItem()
@@ -46,16 +47,30 @@ class DetailSong : AppCompatActivity() {
     }
 
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("TAG ","onNewIntent Detail {$intent}")
+    }
+
+
+
+
     override fun onStart() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Const.SERVICE_SEND_DATA)
         registerReceiver(mBReceiver, intentFilter)
+        Log.d("TAG_LOG", "DetailSong , onStart")
         super.onStart()
     }
 
     override fun onStop() {
         unregisterReceiver(mBReceiver)
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        Log.d("TAG_LOG", "DetailSong , onDestroy")
+        super.onDestroy()
     }
 
 
@@ -178,4 +193,5 @@ class DetailSong : AppCompatActivity() {
         super.onBackPressed()
         overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down)
     }
+
 }

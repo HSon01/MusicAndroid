@@ -11,10 +11,10 @@
         android:id="@+id/top"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toTopOf="@id/card_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="8dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -43,12 +43,13 @@
         android:id="@+id/card_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toTopOf="@id/infoMusic"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top"
-        app:cardCornerRadius="20dp">
+        app:layout_constraintTop_toBottomOf="@id/guidelineTop">
+
         <ImageView
             android:id="@+id/imageMusic"
             android:layout_width="match_parent"
@@ -63,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/guideline2"
+        app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
         app:layout_constraintTop_toBottomOf="@id/card_view">
 
 
@@ -73,6 +74,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="NameSong"
+            android:layout_marginTop="-8dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
             android:textColor="@color/textSong"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -82,7 +90,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
             android:text="creatorSong"
+            android:layout_marginBottom="8dp"
             android:textColor="@color/creator_song"
             android:textSize="15sp" />
 
@@ -96,7 +111,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/rectangle_detail_song"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline2" />
+        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
 
 
     <LinearLayout
@@ -205,9 +220,16 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guidelineBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="185dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.11627907" />
 </androidx.constraintlayout.widget.ConstraintLayout>
