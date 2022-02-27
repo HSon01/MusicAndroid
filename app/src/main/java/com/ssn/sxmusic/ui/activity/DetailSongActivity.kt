@@ -28,19 +28,21 @@ import com.ssn.sxmusic.util.Const.MEDIA_LOOP_ONE
 import com.ssn.sxmusic.util.PrefControllerSingleton
 import com.ssn.sxmusic.util.Util
 import com.ssn.sxmusic.vm.MusicViewModel
-import com.ssn.sxmusic.vm.MusicViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailSong : AppCompatActivity() {
+@AndroidEntryPoint
+class DetailSongActivity : AppCompatActivity() {
     lateinit var binding: ActivityDetailSongBinding
     private lateinit var seekBar: SeekBar
     private val mBReceiver = SongBReceiver()
+    var stopSeekbar = false
     private val sharedPrefControl = PrefControllerSingleton
-    private val musicViewModel: MusicViewModel by viewModels() {
-        MusicViewModelFactory(application)
-    }
+
+    //    private val musicViewModel: MusicViewModel by viewModels()
+    private val musicViewModel: MusicViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +51,6 @@ class DetailSong : AppCompatActivity() {
         setContentView(binding.root)
 
         onclickItem()
-
         supportActionBar!!.hide()
         seekBar = binding.seekBar
         setStatusButton(MediaController.mediaState)
@@ -59,19 +60,20 @@ class DetailSong : AppCompatActivity() {
     }
 
 
-
     override fun onStart() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Const.SERVICE_SEND_DATA)
         registerReceiver(mBReceiver, intentFilter)
+        stopSeekbar = false
         super.onStart()
     }
 
     override fun onStop() {
+        Log.d("TAG", "DETAOL onStop")
         unregisterReceiver(mBReceiver)
+        stopSeekbar = true
         super.onStop()
     }
-
 
 
     inner class SongBReceiver : BroadcastReceiver() {
@@ -157,15 +159,11 @@ class DetailSong : AppCompatActivity() {
         if (loop == MEDIA_LOOP_ONE) {
             binding.repeat.setImageResource(R.drawable.ic_repeat_once)
         }
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Main) {
             if (musicViewModel.findSongByName(s.title)) {
-                withContext(Dispatchers.Main) {
-                    binding.love.setImageResource(R.drawable.ic_favorite_border)
-                }
+                binding.love.setImageResource(R.drawable.ic_favorite_border)
             } else {
-                withContext(Dispatchers.Main) {
-                    binding.love.setImageResource(R.drawable.ic_favorite)
-                }
+                binding.love.setImageResource(R.drawable.ic_favorite)
             }
         }
         initialiseSeekbar()
@@ -179,15 +177,18 @@ class DetailSong : AppCompatActivity() {
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
-                try {
-                    binding.timeCurrentMusic.text = Util.formatTime(seekBar.progress.toLong())
-                    seekBar.progress = MediaController.getCurrentPosition()!!
-                    handler.postDelayed(this, 1000)
-                } catch (e: Exception) {
-                    seekBar.progress = 0
+                if (!stopSeekbar) {
+                    try {
+                        binding.timeCurrentMusic.text = Util.formatTime(seekBar.progress.toLong())
+                        seekBar.progress = MediaController.getCurrentPosition()!!
+                        handler.postDelayed(this, 1000)
+                    } catch (e: Exception) {
+                        seekBar.progress = 0
+                    }
                 }
             }
         }, 0)
+
     }
 
     private fun onSeekBarChange() {

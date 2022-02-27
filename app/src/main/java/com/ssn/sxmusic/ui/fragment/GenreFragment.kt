@@ -14,14 +14,16 @@ import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.model.SongsX
 import com.ssn.sxmusic.util.OnClickAlbum
 import com.ssn.sxmusic.vm.MusicViewModel
-import com.ssn.sxmusic.vm.MusicViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class GenreFragment : Fragment(com.ssn.sxmusic.R.layout.fragment_genre), OnClickAlbum {
     private lateinit var binding: FragmentGenreBinding
-    private val musicViewModel: MusicViewModel by viewModels(){
-        MusicViewModelFactory(requireActivity().application)
-    }
+    private val musicViewModel: MusicViewModel by viewModels()
+//    private val musicViewModel: MusicViewModel by viewModels(){
+//        MusicViewModelFactory(requireActivity().application)
+//    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

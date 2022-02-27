@@ -15,14 +15,12 @@ import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
 import com.ssn.sxmusic.vm.MusicViewModel
-import com.ssn.sxmusic.vm.MusicViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentHomeBinding
-    private val musicViewModel: MusicViewModel by viewModels(){
-        MusicViewModelFactory(requireActivity().application)
-    }
+    private val musicViewModel: MusicViewModel by viewModels()
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

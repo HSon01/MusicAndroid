@@ -18,14 +18,13 @@ import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
 import com.ssn.sxmusic.util.OnDeleteItem
 import com.ssn.sxmusic.vm.MusicViewModel
-import com.ssn.sxmusic.vm.MusicViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoveFragment : Fragment(), OnClickItem, OnDeleteItem {
     private lateinit var binding: FragmentLoveBinding
-    private val musicViewModel: MusicViewModel by viewModels {
-        MusicViewModelFactory(requireActivity().application)
-    }
+    private val musicViewModel: MusicViewModel by viewModels()
     private var musicAdapter: FavoritesAdapter = FavoritesAdapter(this, this)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

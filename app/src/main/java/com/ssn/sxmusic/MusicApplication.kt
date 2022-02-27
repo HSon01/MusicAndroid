@@ -8,7 +8,7 @@ import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.NAME_APPLICATION
 import dagger.hilt.android.HiltAndroidApp
 
-//@HiltAndroidApp
+@HiltAndroidApp
 class MusicApplication : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -23,9 +23,9 @@ class MusicApplication : Application() {
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             notificationChannel.setSound(null, null)
-            val notifiManager: NotificationManager =
+            val notificationManager: NotificationManager =
                 getSystemService(NotificationManager::class.java)
-            notifiManager.createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 

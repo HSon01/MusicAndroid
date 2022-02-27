@@ -1,18 +1,21 @@
 package com.ssn.sxmusic.vm
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssn.sxmusic.database.SongDatabase
 import com.ssn.sxmusic.media.SongManager
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.model.SongsX
 import com.ssn.sxmusic.network.MusicClient
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MusicViewModel(application: Application) : ViewModel() {
+@HiltViewModel
+class MusicViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
     private var _musics = MutableLiveData<ArrayList<Song>>()
     val listMusic: LiveData<ArrayList<Song>>
@@ -36,7 +39,7 @@ class MusicViewModel(application: Application) : ViewModel() {
     }
 
     suspend fun findSongByName(name: String): Boolean {
-        if (songDao.findSongByName(name)  != null) {
+        if (songDao.checkExistSong(name)) {
             return true
         }
         return false
@@ -46,7 +49,7 @@ class MusicViewModel(application: Application) : ViewModel() {
     fun getAllMusic() {
         viewModelScope.launch {
             val musics = MusicClient.invoke().getAllSong()
-            SongManager.Musics = musics
+            SongManager.musics = musics
             SongManager.getAllSong()
         }
 

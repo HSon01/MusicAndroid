@@ -20,5 +20,8 @@ interface SongDao {
     suspend fun deleteSongByName(name: String)
 
     @Query("select * from Song where _name =:name")
-    suspend fun findSongByName(name: String):Song
+    suspend fun findSongByName(name: String): Song
+
+    @Query("SELECT EXISTS(SELECT * FROM Song WHERE _name =:name)")
+    suspend fun checkExistSong(name: String):Boolean
 }

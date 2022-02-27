@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ssn.sxmusic">
-
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".MusicApplication"
         android:allowBackup="true"
@@ -16,7 +14,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name="com.ssn.sxmusic.ui.activity.Splash"
+            android:name="com.ssn.sxmusic.ui.activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,22 +23,23 @@
         </activity>
 
         <activity
-            android:name="com.ssn.sxmusic.ui.activity.Home"
+            android:name="com.ssn.sxmusic.ui.activity.HomeActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >
             <nav-graph android:value="@navigation/main_graph"/>
         </activity>
         <activity
             android:theme="@style/AnimationDetail"
-            android:name="com.ssn.sxmusic.ui.activity.DetailSong"
+            android:name="com.ssn.sxmusic.ui.activity.DetailSongActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.activity.Home">
+            android:parentActivityName=".ui.activity.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activity.Home" />
+                android:value=".ui.activity.HomeActivity" />
 
         </activity>
+
 
 
         <service

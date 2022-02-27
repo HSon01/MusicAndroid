@@ -15,10 +15,12 @@ import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
+import dagger.hilt.android.AndroidEntryPoint
 
-class DetailGenre : Fragment(), OnClickItem {
+@AndroidEntryPoint
+class DetailGenreFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentDetailGenreBinding
-    private val args: DetailGenreArgs by navArgs()
+    private val args: DetailGenreFragmentArgs by navArgs()
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +49,7 @@ class DetailGenre : Fragment(), OnClickItem {
 
     fun onClick() {
         binding.bntBack.setOnClickListener {
-            val action = DetailGenreDirections.actionDetailAlbumFragmentToGenreFragment()
+            val action = DetailGenreFragmentDirections.actionDetailAlbumFragmentToGenreFragment()
             findNavController().navigate(action)
         }
     }

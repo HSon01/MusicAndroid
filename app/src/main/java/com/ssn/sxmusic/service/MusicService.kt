@@ -15,7 +15,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.ssn.sxmusic.R
 import com.ssn.sxmusic.media.MediaController
-import com.ssn.sxmusic.ui.activity.DetailSong
+import com.ssn.sxmusic.ui.activity.DetailSongActivity
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_CLEAR
 import com.ssn.sxmusic.util.Const.ACTION_NEXT
@@ -28,10 +28,6 @@ import com.ssn.sxmusic.util.Const.NOTIFICATION_ID
 import com.ssn.sxmusic.util.Const.REQUEST_CODE_NOTIFICATION
 import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
 import com.ssn.sxmusic.util.Util
-
-
-
-
 
 //@AndroidEntryPoint
 class MusicService : Service() {
@@ -104,7 +100,7 @@ class MusicService : Service() {
         Log.d("TAG RunningActivity", "${Util.isRunningActivity(context)}")
 
 
-        val resultIntent = Intent(this, DetailSong::class.java)
+        val resultIntent = Intent(this, DetailSongActivity::class.java)
         val stackBuilder: TaskStackBuilder = TaskStackBuilder.create(this)
         stackBuilder.addNextIntentWithParentStack(resultIntent)
         pendingIntent =

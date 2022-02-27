@@ -21,10 +21,11 @@ import com.ssn.sxmusic.service.MusicService
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_PLAYING
 import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
+import dagger.hilt.android.AndroidEntryPoint
 import com.ssn.sxmusic.util.Const.MEDIA_PLAYING as MEDIA_PLAYING1
 
-
-class Home : AppCompatActivity() {
+@AndroidEntryPoint
+class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
     private val mBReceiver = SongBReceiver()
@@ -125,7 +126,7 @@ class Home : AppCompatActivity() {
         }
 
         binding.menuPlay.setOnClickListener {
-            val int = Intent(this, DetailSong::class.java)
+            val int = Intent(this, DetailSongActivity::class.java)
             startActivity(int)
             overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
         }
@@ -157,5 +158,4 @@ class Home : AppCompatActivity() {
         }
     }
 }
-
 

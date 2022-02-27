@@ -7,7 +7,7 @@ import com.ssn.sxmusic.model.SongsX
 
 object SongManager {
     var allSong = arrayListOf<Song>()
-    lateinit var Musics: Musics
+    lateinit var musics: Musics
     var Album = arrayListOf<SongsX>()
     private var top100_AM = arrayListOf<Song>()
     private var top100_CA = arrayListOf<Song>()
@@ -15,7 +15,7 @@ object SongManager {
     private var top100_VN = arrayListOf<Song>()
 
     private fun getAMSong(): List<Song> {
-        val list = Musics.songs.top100_AM
+        val list = musics.songs.top100_AM
         list.forEach {
             allSong.addAll(it.songs)
             Album.addAll(listOf(it))
@@ -25,7 +25,7 @@ object SongManager {
     }
 
     private fun getCASong(): List<Song> {
-        val list = Musics.songs.top100_AM
+        val list = musics.songs.top100_AM
         list.forEach {
             allSong.addAll(it.songs)
             Album.addAll(listOf(it))
@@ -35,7 +35,7 @@ object SongManager {
     }
 
     private fun getVNSong(): List<Song> {
-        val list = Musics.songs.top100_AM
+        val list = musics.songs.top100_AM
         list.forEach {
             allSong.addAll(it.songs)
             Album.addAll(listOf(it))
@@ -45,7 +45,7 @@ object SongManager {
     }
 
     private fun getKLSong(): List<Song> {
-        val list = Musics.songs.top100_AM
+        val list = musics.songs.top100_AM
         list.forEach {
             allSong.addAll(it.songs)
             Album.addAll(listOf(it))

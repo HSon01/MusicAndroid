@@ -16,14 +16,13 @@ import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
 import com.ssn.sxmusic.vm.MusicViewModel
-import com.ssn.sxmusic.vm.MusicViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentListmusicBinding
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
-    private val musicViewModel: MusicViewModel by viewModels {
-        MusicViewModelFactory(requireActivity().application)
-    }
+    private val musicViewModel: MusicViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -75,5 +74,4 @@ class SearchFragment : Fragment(), OnClickItem {
         })
     }
 }
-
 

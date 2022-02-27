@@ -15,7 +15,6 @@ class SongsAdapter(val onClick: OnClickItem) :
     ListAdapter<Song, SongsAdapter.ViewHolder>(SongsDiff), Filterable {
     private var list: ArrayList<Song> = arrayListOf()
 
-
     fun setData(list: ArrayList<Song>) {
         this.list = list
         submitList(list)

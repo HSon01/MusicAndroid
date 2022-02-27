@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailAlbumFragment"
-        android:name="com.ssn.sxmusic.ui.fragment.DetailGenre"
+        android:name="com.ssn.sxmusic.ui.fragment.DetailGenreFragment"
         android:label="DetailAlbumFragment">
         <argument
             android:name="genre"

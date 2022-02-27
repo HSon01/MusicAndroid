@@ -7,16 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ssn.sxmusic.databinding.ActivitySplashBinding
 import com.ssn.sxmusic.vm.MusicViewModel
-import com.ssn.sxmusic.vm.MusicViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class Splash : AppCompatActivity() {
-    private val musicViewModel: MusicViewModel by viewModels{
-        MusicViewModelFactory(application)
-    }
+@AndroidEntryPoint
+class SplashActivity : AppCompatActivity() {
+    //    private val musicViewModel: MusicViewModel by viewModels{
+//        MusicViewModelFactory(application)
+//    }
+    private val musicViewModel: MusicViewModel by viewModels()
     lateinit var binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,7 @@ class Splash : AppCompatActivity() {
         lifecycleScope.launch {
             musicViewModel.getAllMusic()
             withContext(Dispatchers.Main) {
-                val intent = Intent(this@Splash, Home::class.java)
+                val intent = Intent(this@SplashActivity, HomeActivity::class.java)
                 delay(1000L)
                 startActivity(intent)
                 finish()
@@ -40,4 +42,3 @@ class Splash : AppCompatActivity() {
 
     override fun onBackPressed() {} // Not allowed to operate
 }
-
