@@ -7,31 +7,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ssn.sxmusic.databinding.ActivitySplashBinding
 import com.ssn.sxmusic.vm.MusicViewModel
+import com.ssn.sxmusic.vm.MusicViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class Splash : AppCompatActivity() {
-    private val musicViewModel: MusicViewModel by viewModels()
+    private val musicViewModel: MusicViewModel by viewModels{
+        MusicViewModelFactory(application)
+    }
     lateinit var binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar!!.hide()
-        musicViewModel.getAllMusic()
-//        musicViewModel.getAllListMusic()
-//        musicViewModel.listMusic.observe(this, {
-//            MediaController.songs.addAll(it)
-//        })
         startHomeActivity()
     }
 
     private fun startHomeActivity() {
         lifecycleScope.launch {
+            musicViewModel.getAllMusic()
             withContext(Dispatchers.Main) {
-                var intent = Intent(this@Splash, Home::class.java)
+                val intent = Intent(this@Splash, Home::class.java)
                 delay(1000L)
                 startActivity(intent)
                 finish()

@@ -9,7 +9,9 @@ import android.os.Handler
 import android.util.Log
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.ssn.sxmusic.R
 import com.ssn.sxmusic.databinding.ActivityDetailSongBinding
@@ -25,33 +27,36 @@ import com.ssn.sxmusic.util.Const.MEDIA_LOOP_ALL
 import com.ssn.sxmusic.util.Const.MEDIA_LOOP_ONE
 import com.ssn.sxmusic.util.PrefControllerSingleton
 import com.ssn.sxmusic.util.Util
+import com.ssn.sxmusic.vm.MusicViewModel
+import com.ssn.sxmusic.vm.MusicViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetailSong : AppCompatActivity() {
     lateinit var binding: ActivityDetailSongBinding
     private lateinit var seekBar: SeekBar
     private val mBReceiver = SongBReceiver()
     private val sharedPrefControl = PrefControllerSingleton
+    private val musicViewModel: MusicViewModel by viewModels() {
+        MusicViewModelFactory(application)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG_LOG", "DetailSong , onCreate")
-//
         binding = ActivityDetailSongBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         onclickItem()
+
         supportActionBar!!.hide()
         seekBar = binding.seekBar
         setStatusButton(MediaController.mediaState)
         MediaController.currentSong?.let { showInfoSong(it) }
         sharedPrefControl.prefController(this)
+
     }
-
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        Log.d("TAG ","onNewIntent Detail {$intent}")
-    }
-
 
 
 
@@ -59,7 +64,6 @@ class DetailSong : AppCompatActivity() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Const.SERVICE_SEND_DATA)
         registerReceiver(mBReceiver, intentFilter)
-        Log.d("TAG_LOG", "DetailSong , onStart")
         super.onStart()
     }
 
@@ -68,10 +72,6 @@ class DetailSong : AppCompatActivity() {
         super.onStop()
     }
 
-    override fun onDestroy() {
-        Log.d("TAG_LOG", "DetailSong , onDestroy")
-        super.onDestroy()
-    }
 
 
     inner class SongBReceiver : BroadcastReceiver() {
@@ -91,6 +91,7 @@ class DetailSong : AppCompatActivity() {
 
 
     private fun onclickItem() {
+
         binding.playMusic.setOnClickListener {
             if (MediaController.mediaState == Const.MEDIA_PLAYING) {
                 sendActionToService(ACTION_PAUSE)
@@ -120,7 +121,24 @@ class DetailSong : AppCompatActivity() {
             }
         }
         binding.love.setOnClickListener {
-            binding.love.setImageResource(R.drawable.ic_favorite_border)
+            lifecycleScope.launch(Dispatchers.IO) {
+                MediaController.currentSong?.let {
+                    if (musicViewModel.findSongByName(it.title)) {
+
+                        musicViewModel.deleteSong(it.title)
+
+                        withContext(Dispatchers.Main) {
+                            binding.love.setImageResource(R.drawable.ic_favorite)
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            binding.love.setImageResource(R.drawable.ic_favorite_border)
+                        }
+                        MediaController.currentSong?.let { it1 -> musicViewModel.addSong(it1) }
+                    }
+                }
+
+            }
         }
         binding.bntBack.setOnClickListener {
             onBackPressed()
@@ -138,6 +156,17 @@ class DetailSong : AppCompatActivity() {
         val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
         if (loop == MEDIA_LOOP_ONE) {
             binding.repeat.setImageResource(R.drawable.ic_repeat_once)
+        }
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (musicViewModel.findSongByName(s.title)) {
+                withContext(Dispatchers.Main) {
+                    binding.love.setImageResource(R.drawable.ic_favorite_border)
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    binding.love.setImageResource(R.drawable.ic_favorite)
+                }
+            }
         }
         initialiseSeekbar()
     }

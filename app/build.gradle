@@ -111,5 +111,19 @@ dependencies {
     //chip-navigation
     implementation("com.ismaeldivita.chipnavigation:chip-navigation-bar:1.3.0")
 
+    //SWIPE item
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+
+    //Room
+    //Room database
+    def roomVersion = "2.4.1"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    // To use Kotlin annotation processing tool (kapt) @Entity
+    kapt("androidx.room:room-compiler:$roomVersion")
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$roomVersion")
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$roomVersion")
+
 
 }

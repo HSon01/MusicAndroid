@@ -15,32 +15,43 @@ import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
 import com.ssn.sxmusic.vm.MusicViewModel
+import com.ssn.sxmusic.vm.MusicViewModelFactory
 
 
 class HomeFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentHomeBinding
-    private val musicViewModel: MusicViewModel by viewModels()
+    private val musicViewModel: MusicViewModel by viewModels(){
+        MusicViewModelFactory(requireActivity().application)
+    }
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setupRecyclerview()
+        observeLiveData()
+
+        return binding.root
+    }
+
+    private fun setupRecyclerview() {
         binding.listSong.layoutManager =
             LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         binding.listSong.adapter = musicAdapter
+    }
+
+    private fun observeLiveData() {
         musicViewModel.getSongs()
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
             musicAdapter.setData(it)
             MediaController.setListSong(it)
         })
-
-        return binding.root
     }
 
-    override fun onClickListener(song: Song) {
+    override fun onClickListener(Song: Song) {
         val intent = Intent(Const.FRAGMENT_SEND_DATA)
-        MediaController.setCurrentSong(MediaController.findSongByPosition(song))
+        MediaController.setCurrentSong(MediaController.findSongByPosition(Song))
         context?.sendBroadcast(intent)
     }
 

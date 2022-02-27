@@ -26,28 +26,29 @@ class DetailGenre : Fragment(), OnClickItem {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailGenreBinding.inflate(inflater, container, false)
-        binding.listMusic.layoutManager =
-            LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
-        binding.listMusic.adapter = musicAdapter
-        binding.title.text = args.genre
-        musicAdapter.setData(MediaController.songs)
+        setupUI()
         onClick()
         return binding.root
     }
 
-    override fun onClickListener(song: Song) {
+    private fun setupUI() {
+        binding.listMusic.layoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+        binding.listMusic.adapter = musicAdapter
+        binding.title.text = args.genre
+        with(musicAdapter) { setData(MediaController.songs) }
+    }
+
+    override fun onClickListener(Song: Song) {
         val intent = Intent(Const.FRAGMENT_SEND_DATA)
-        MediaController.setCurrentSong(MediaController.findSongByPosition(song))
+        MediaController.setCurrentSong(MediaController.findSongByPosition(Song))
         context?.sendBroadcast(intent)
     }
 
-    fun onClick(){
+    fun onClick() {
         binding.bntBack.setOnClickListener {
             val action = DetailGenreDirections.actionDetailAlbumFragmentToGenreFragment()
             findNavController().navigate(action)
         }
     }
-
-
-
 }

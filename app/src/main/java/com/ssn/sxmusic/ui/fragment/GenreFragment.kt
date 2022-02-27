@@ -14,26 +14,39 @@ import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.model.SongsX
 import com.ssn.sxmusic.util.OnClickAlbum
 import com.ssn.sxmusic.vm.MusicViewModel
+import com.ssn.sxmusic.vm.MusicViewModelFactory
 
 
 class GenreFragment : Fragment(com.ssn.sxmusic.R.layout.fragment_genre), OnClickAlbum {
     private lateinit var binding: FragmentGenreBinding
-    private val musicViewModel: MusicViewModel by viewModels()
+    private val musicViewModel: MusicViewModel by viewModels(){
+        MusicViewModelFactory(requireActivity().application)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentGenreBinding.inflate(inflater, container, false)
+
+        val adapter = setupRecyclerview()
+        observerLivedata(adapter)
+        return binding.root
+    }
+
+    private fun setupRecyclerview(): AlbumAdapter {
         val gridview = GridLayoutManager(this.context, 2)
         val adapter = AlbumAdapter(this)
+        binding.rvAlbum.adapter = adapter
+        binding.rvAlbum.layoutManager = gridview
+        return adapter
+    }
+
+    private fun observerLivedata(adapter: AlbumAdapter) {
         musicViewModel.getAlbum()
         musicViewModel.album.observe(viewLifecycleOwner, {
             adapter.setData(it)
         })
-        binding.rvAlbum.adapter = adapter
-        binding.rvAlbum.layoutManager = gridview
-        return binding.root
     }
 
     override fun onClickListener(x: SongsX) {

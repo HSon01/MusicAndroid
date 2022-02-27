@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object MusicClient {
 
     //private const val BASE_API = "127.0.0.1/"
-    private const val BASE_API = "http://192.168.1.11:8080/"
+    private const val BASE_API = "http://192.168.1.7:8080/"
     private var retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_API)

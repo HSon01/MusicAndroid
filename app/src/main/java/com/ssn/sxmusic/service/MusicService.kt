@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import android.widget.RemoteViews
@@ -31,6 +30,9 @@ import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
 import com.ssn.sxmusic.util.Util
 
 
+
+
+
 //@AndroidEntryPoint
 class MusicService : Service() {
     private val mediaController = MediaController
@@ -38,11 +40,6 @@ class MusicService : Service() {
     private var musicB = MusicBroadCast()
     private var binderMusicService = MusicBinder()
     private lateinit var pendingIntent: PendingIntent
-    private var isTask: Boolean = true
-
-
-//    @Inject
-//    lateinit var notificationChannel: NotificationChannel
 
 
     override fun onBind(intent: Intent?): IBinder {
@@ -72,7 +69,7 @@ class MusicService : Service() {
         intentFilter.addAction(ACTION_PAUSE)
         intentFilter.addAction(ACTION_PLAYING)
         intentFilter.addAction(FRAGMENT_SEND_DATA)
-        intentFilter.addAction(Const.SERVICE_SEND_DATA)
+        intentFilter.addAction(SERVICE_SEND_DATA)
         registerReceiver(musicB, intentFilter)
         super.onCreate()
     }
@@ -134,10 +131,6 @@ class MusicService : Service() {
             .setContentIntent(pendingIntent)
             .setSound(null)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            noti.setChannelId(notificationChannel.id)
-
-        }
         startForeground(NOTIFICATION_ID, noti.build())
     }
 
@@ -193,8 +186,12 @@ class MusicService : Service() {
                 return
             }
             ACTION_CLEAR -> {
-                stopSelf()
-                mediaController.mediaPlayer?.stop();
+                if(Util.isRunningActivity(context)){
+                    stopForeground(true)
+                }else{
+                    stopSelf()
+                    mediaController.mediaPlayer?.stop()
+                }
                 return
             }
             SERVICE_SEND_DATA -> {
@@ -211,7 +208,6 @@ class MusicService : Service() {
         val mediaPlayer = mediaController.mediaPlayer
         mediaPlayer?.release()
         mediaController.mediaPlayer = null
-
     }
 
 

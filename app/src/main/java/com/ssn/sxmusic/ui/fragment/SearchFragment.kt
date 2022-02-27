@@ -16,11 +16,14 @@ import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
 import com.ssn.sxmusic.vm.MusicViewModel
+import com.ssn.sxmusic.vm.MusicViewModelFactory
 
-class searchFragment : Fragment(), OnClickItem {
+class SearchFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentListmusicBinding
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
-    private val musicViewModel: MusicViewModel by viewModels()
+    private val musicViewModel: MusicViewModel by viewModels {
+        MusicViewModelFactory(requireActivity().application)
+    }
 
 
     override fun onCreateView(
@@ -29,16 +32,24 @@ class searchFragment : Fragment(), OnClickItem {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListmusicBinding.inflate(inflater, container, false)
-        binding.listMusic.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.listMusic.adapter = musicAdapter
+        setupRecyclerview()
+        observerLivedata()
+        return binding.root
+    }
+
+    private fun observerLivedata() {
         musicViewModel.getSongs()
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
             musicAdapter.setData(it)
             MediaController.setListSong(it)
         })
+    }
+
+    private fun setupRecyclerview() {
+        binding.listMusic.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.listMusic.adapter = musicAdapter
         searchMusic()
-        return binding.root
     }
 
     override fun onClickListener(Song: Song) {

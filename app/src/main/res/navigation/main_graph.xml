@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.ssn.sxmusic.ui.fragment.searchFragment"
+        android:name="com.ssn.sxmusic.ui.fragment.SearchFragment"
         android:label="searchFragment" >
         <action
             android:id="@+id/action_searchFragment_to_homeFragment"
