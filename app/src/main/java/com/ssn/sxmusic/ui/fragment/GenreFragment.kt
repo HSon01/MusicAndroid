@@ -21,9 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class GenreFragment : Fragment(com.ssn.sxmusic.R.layout.fragment_genre), OnClickAlbum {
     private lateinit var binding: FragmentGenreBinding
     private val musicViewModel: MusicViewModel by viewModels()
-//    private val musicViewModel: MusicViewModel by viewModels(){
-//        MusicViewModelFactory(requireActivity().application)
-//    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

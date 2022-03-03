@@ -1,34 +1,46 @@
 package com.ssn.sxmusic.vm
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ssn.sxmusic.database.SongDatabase
 import com.ssn.sxmusic.media.SongManager
+import com.ssn.sxmusic.model.Musics
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.model.SongsX
 import com.ssn.sxmusic.network.MusicClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class MusicViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
+    private val musics: Call<Musics> = MusicClient.api.getAllSong0()
+    private val songDao = SongDatabase.getStudentDatabase(application).getSongDao()
 
-    private var _musics = MutableLiveData<ArrayList<Song>>()
+    private var _listMusic = MutableLiveData<ArrayList<Song>>()
     val listMusic: LiveData<ArrayList<Song>>
-        get() = _musics
+        get() = _listMusic
 
     private var _album = MutableLiveData<ArrayList<SongsX>>()
     val album: LiveData<ArrayList<SongsX>>
         get() = _album
 
-    private val songDao = SongDatabase.getStudentDatabase(application).getSongDao()
+    private var _startActivity = MutableLiveData<Boolean>()
+    val startActivity: LiveData<Boolean>
+        get() = _startActivity
+
+
+
+
 
     fun getFavoriteSongs(): LiveData<List<Song>> = songDao.getAllSong()
-
 
     suspend fun addSong(s: Song) {
         songDao.insertSong(s)
@@ -47,12 +59,35 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
 
 
     fun getAllMusic() {
+//       val job = viewModelScope.launch {
+//           musics = MusicClient.invoke().getAllSong()
+//        }
+//        job.invokeOnCompletion {
+//            if(SongManager.musics != null){
+//                SongManager.musics = musics
+//                SongManager.getAllSong()
+//            }
+//        }
         viewModelScope.launch {
-            val musics = MusicClient.invoke().getAllSong()
-            SongManager.musics = musics
-            SongManager.getAllSong()
-        }
+            musics.enqueue(object : Callback<Musics> {
+                override fun onResponse(call: Call<Musics>, response: Response<Musics>) {
+                    response.body().let {
+                        if (it != null) {
 
+                            SongManager.musics = it
+                            _startActivity.postValue(true)
+                            SongManager.getAllSong()
+
+                            Log.d("AGT", "${SongManager.allSong.size}")
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Musics>, t: Throwable) {
+                    Log.d("AGT ERROR", "CALL API ERROR")
+                }
+            })
+        }
     }
 
     fun getAlbum() {
@@ -61,7 +96,7 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
     }
 
     fun getSongs() {
-        _musics.postValue(SongManager.allSong)
+        _listMusic.postValue(SongManager.allSong)
     }
 
 }

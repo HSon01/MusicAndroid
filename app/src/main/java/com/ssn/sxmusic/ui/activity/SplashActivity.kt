@@ -1,5 +1,6 @@
 package com.ssn.sxmusic.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -9,15 +10,12 @@ import com.ssn.sxmusic.databinding.ActivitySplashBinding
 import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
-    //    private val musicViewModel: MusicViewModel by viewModels{
-//        MusicViewModelFactory(application)
-//    }
     private val musicViewModel: MusicViewModel by viewModels()
     lateinit var binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +29,15 @@ class SplashActivity : AppCompatActivity() {
     private fun startHomeActivity() {
         lifecycleScope.launch {
             musicViewModel.getAllMusic()
+//            delay(1000L)
             withContext(Dispatchers.Main) {
-                val intent = Intent(this@SplashActivity, HomeActivity::class.java)
-                delay(1000L)
-                startActivity(intent)
-                finish()
+                musicViewModel.startActivity.observe(this@SplashActivity, {
+                    if (it) {
+                        val intent = Intent(this@SplashActivity, HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                })
             }
         }
     }
