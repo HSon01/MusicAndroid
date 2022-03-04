@@ -5,6 +5,17 @@
     <string name="genre">Genre</string>
     <string name="now_playing">Now Playing</string>
     <string name="favorites">Favorites</string>
+    <string name="home">Home</string>
+    <string name="text_test">creator Song</string>
+    <string name="time_test">06:05</string>
+    <string name="back">Back</string>
+    <string name="repeat">repeat</string>
+    <string name="love">love</string>
+    <string name="previous">previous</string>
+    <string name="play">play</string>
+    <string name="next">next</string>
+    <string name="image_notification">image</string>
+    <string name="clear">clear</string>
 
 
 </resources>

@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ssn.sxmusic.database.SongDatabase
 import com.ssn.sxmusic.media.SongManager
@@ -21,24 +20,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MusicViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
-    private val musics: Call<Musics> = MusicClient.api.getAllSong0()
+
+    private var musics: Call<Musics> = MusicClient.invoke().getAllSong0()
     private val songDao = SongDatabase.getStudentDatabase(application).getSongDao()
 
-    private var _listMusic = MutableLiveData<ArrayList<Song>>()
+    private fun getSongs(): LiveData<ArrayList<Song>> = SongManager.listMusic
     val listMusic: LiveData<ArrayList<Song>>
-        get() = _listMusic
+        get() = getSongs()
 
-    private var _album = MutableLiveData<ArrayList<SongsX>>()
+    private fun getAlbums(): LiveData<ArrayList<SongsX>> = SongManager.listAlbum
     val album: LiveData<ArrayList<SongsX>>
-        get() = _album
-
-    private var _startActivity = MutableLiveData<Boolean>()
-    val startActivity: LiveData<Boolean>
-        get() = _startActivity
-
-
-
-
+        get() = getAlbums()
 
     fun getFavoriteSongs(): LiveData<List<Song>> = songDao.getAllSong()
 
@@ -59,44 +51,23 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
 
 
     fun getAllMusic() {
-//       val job = viewModelScope.launch {
-//           musics = MusicClient.invoke().getAllSong()
-//        }
-//        job.invokeOnCompletion {
-//            if(SongManager.musics != null){
-//                SongManager.musics = musics
-//                SongManager.getAllSong()
-//            }
-//        }
         viewModelScope.launch {
             musics.enqueue(object : Callback<Musics> {
                 override fun onResponse(call: Call<Musics>, response: Response<Musics>) {
                     response.body().let {
                         if (it != null) {
-
                             SongManager.musics = it
-                            _startActivity.postValue(true)
-                            SongManager.getAllSong()
-
+                            SongManager.getSongAndAlbum()
                             Log.d("AGT", "${SongManager.allSong.size}")
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<Musics>, t: Throwable) {
-                    Log.d("AGT ERROR", "CALL API ERROR")
+                    Log.d("AGT", "CALL API ERROR $t")
+                    musics = MusicClient.invoke().getAllSong0()
                 }
             })
         }
     }
-
-    fun getAlbum() {
-        val s = SongManager.getAlbum()
-        _album.postValue(s as ArrayList<SongsX>?)
-    }
-
-    fun getSongs() {
-        _listMusic.postValue(SongManager.allSong)
-    }
-
 }

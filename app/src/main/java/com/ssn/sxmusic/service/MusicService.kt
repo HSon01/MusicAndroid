@@ -84,7 +84,6 @@ class MusicService : Service() {
         remoteView.setImageViewResource(R.id.play, R.drawable.ic_pause)
         remoteView.setImageViewResource(R.id.clear, R.drawable.ic_clear)
 
-
         if (mediaController.getIsPlay() == Const.MEDIA_PLAYING) {
             remoteView.setOnClickPendingIntent(R.id.play, pendingIntent(this, ACTION_PAUSE))
             remoteView.setImageViewResource(R.id.play, R.drawable.ic_pause)
@@ -96,8 +95,6 @@ class MusicService : Service() {
         remoteView.setOnClickPendingIntent(R.id.clear, pendingIntent(this, ACTION_CLEAR))
         remoteView.setOnClickPendingIntent(R.id.next, pendingIntent(this, ACTION_NEXT))
         remoteView.setOnClickPendingIntent(R.id.previous, pendingIntent(this, ACTION_PREVIOUS))
-
-        Log.d("TAG RunningActivity", "${Util.isRunningActivity(context)}")
 
 
         val resultIntent = Intent(this, DetailSongActivity::class.java)

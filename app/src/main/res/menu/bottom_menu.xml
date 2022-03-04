@@ -4,23 +4,23 @@
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_home"
-        android:title="Home"
-        app:cnb_iconColor="@color/home" />
+        android:title="@string/home"
+        app:cnb_iconColor="@color/black" />
 
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/ic_search"
         android:title="@string/search"
-        app:cnb_iconColor="@color/home" />
+        app:cnb_iconColor="@color/black" />
     <item
         android:id="@+id/genreFragment"
         android:icon="@drawable/ic_album"
         android:title="@string/genre"
-        app:cnb_iconColor="@color/home" />
+        app:cnb_iconColor="@color/black"  />
     <item
         android:id="@+id/loveFragment"
         android:icon="@drawable/ic_favorite"
-        android:title="Favorites"
-        app:cnb_iconColor="@color/home" />
+        android:title="@string/favorites"
+        app:cnb_iconColor="@color/black" />
 
 </menu>

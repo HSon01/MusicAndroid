@@ -14,7 +14,7 @@
         android:scaleType="fitCenter"
         android:background="@drawable/shapegenre"
         android:src="@drawable/ic_album"
-        app:tint="@color/black" />
+        app:tint="#99BDDF" />
 
     <TextView
         android:id="@+id/tv_title_Genre"
@@ -28,7 +28,7 @@
         android:gravity="center_horizontal"
         android:marqueeRepeatLimit="marquee_forever"
         android:paddingLeft="5dp"
-        android:textColor="@color/textSong"
+        android:textColor="@color/color_text_hn"
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:text="Trung Quan Ido" />

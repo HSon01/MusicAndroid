@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragment.LoveFragment"
-    android:background="@color/list_music"
+    android:background="@color/background_hn"
     android:id="@+id/constraintLayout">
 
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/now_play"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:text="@string/favorites"
-        android:textColor="@color/textSong"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,6 +30,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        app:layout_constraintTop_toBottomOf="@id/now_play" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

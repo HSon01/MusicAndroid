@@ -7,6 +7,8 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.viewModels
@@ -32,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 @AndroidEntryPoint
 class DetailSongActivity : AppCompatActivity() {
@@ -113,11 +116,11 @@ class DetailSongActivity : AppCompatActivity() {
         binding.repeat.setOnClickListener {
             when (sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)) {
                 MEDIA_LOOP_ONE -> {
-                    binding.repeat.setImageResource(R.drawable.ic_repeat)
+                    binding.repeat.setImageResource(com.ssn.sxmusic.R.drawable.ic_repeat)
                     sharedPrefControl.setMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
                 }
                 MEDIA_LOOP_ALL -> {
-                    binding.repeat.setImageResource(R.drawable.ic_repeat_once)
+                    binding.repeat.setImageResource(com.ssn.sxmusic.R.drawable.ic_repeat_once)
                     sharedPrefControl.setMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ONE)
                 }
             }
@@ -126,9 +129,7 @@ class DetailSongActivity : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.IO) {
                 MediaController.currentSong?.let {
                     if (musicViewModel.findSongByName(it.title)) {
-
                         musicViewModel.deleteSong(it.title)
-
                         withContext(Dispatchers.Main) {
                             binding.love.setImageResource(R.drawable.ic_favorite)
                         }
@@ -151,10 +152,11 @@ class DetailSongActivity : AppCompatActivity() {
         binding.nameMusic.text = s.title
         binding.creatorMusic.text = s.creator
         binding.timeMusic.text = Util.formatTime(MediaController.getDuration()!!.toLong())
-        Glide.with(binding.imageMusic).load(s.bgImage)
-            .placeholder(R.mipmap.ic_launcher_round)
-            .error(R.drawable.defaultsong)
-            .into(binding.imageMusic)
+        Glide.with(binding.imageSong).load(s.bgImage)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .error(R.drawable.ic_launcher_foreground)
+            .into(binding.imageSong)
+
         val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
         if (loop == MEDIA_LOOP_ONE) {
             binding.repeat.setImageResource(R.drawable.ic_repeat_once)
@@ -212,12 +214,18 @@ class DetailSongActivity : AppCompatActivity() {
 
     private fun setStatusButton(isPlay: Int) {
         if (isPlay == Const.MEDIA_PLAYING) {
-            binding.playMusic.setImageResource(R.drawable.custom_ic_pause)
+            binding.playMusic.setImageResource(R.drawable.ic_pause)
+            addAnimation()
         } else {
-            binding.playMusic.setImageResource(R.drawable.custom_ic_play)
+            binding.playMusic.setImageResource(R.drawable.ic_play)
+            binding.imageSong.clearAnimation()
         }
     }
 
+    private fun addAnimation(){
+        val fade1: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_image)
+        binding.imageSong.startAnimation(fade1)
+    }
 
     override fun onBackPressed() {
         super.onBackPressed()

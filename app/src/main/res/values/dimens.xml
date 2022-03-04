@@ -2,6 +2,13 @@
 <resources>
     <dimen name="progressbar_splash_width">30dp</dimen>
     <dimen name="progressbar_splash_height">30dp</dimen>
-    <dimen name="width_image_music">350dp</dimen>
-    <dimen name="height_image_music">350dp</dimen>
+    <dimen name="now_play">16sp</dimen>
+    <dimen name="height_top">56dp</dimen>
+    <dimen name="bnt_back">30dp</dimen>
+    <dimen name="marginStart_20">20dp</dimen>
+    <dimen name="CornerRadius_image">25dp</dimen>
+    <dimen name="width_image">300dp</dimen>
+    <dimen name="height_image">300dp</dimen>
+    <dimen name="width_height_icon_detail_song">25dp</dimen>
+
 </resources>

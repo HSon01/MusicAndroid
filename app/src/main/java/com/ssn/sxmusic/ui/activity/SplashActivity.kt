@@ -3,6 +3,7 @@ package com.ssn.sxmusic.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -10,6 +11,7 @@ import com.ssn.sxmusic.databinding.ActivitySplashBinding
 import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -27,17 +29,13 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startHomeActivity() {
+        musicViewModel.getAllMusic()
         lifecycleScope.launch {
-            musicViewModel.getAllMusic()
-//            delay(1000L)
+            delay(1000L)
             withContext(Dispatchers.Main) {
-                musicViewModel.startActivity.observe(this@SplashActivity, {
-                    if (it) {
-                        val intent = Intent(this@SplashActivity, HomeActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-                })
+                val intent = Intent(this@SplashActivity, HomeActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }

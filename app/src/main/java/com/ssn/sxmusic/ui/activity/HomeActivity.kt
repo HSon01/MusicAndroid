@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -21,11 +22,13 @@ import com.ssn.sxmusic.service.MusicService
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_PLAYING
 import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
+import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssn.sxmusic.util.Const.MEDIA_PLAYING as MEDIA_PLAYING1
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
+    private val musicViewModel: MusicViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
     private val mBReceiver = SongBReceiver()
@@ -65,6 +68,7 @@ class HomeActivity : AppCompatActivity() {
         }
         super.onStart()
     }
+
 
 
     private fun settingView() {
@@ -144,7 +148,7 @@ class HomeActivity : AppCompatActivity() {
         binding.creatorSong.text = s?.creator
         Glide.with(binding.imageSong).load(s?.bgImage)
             .placeholder(R.mipmap.ic_launcher_round)
-            .error(R.drawable.defaultsong)
+            .error(R.drawable.ic_album)
             .into(binding.imageSong)
         setStatusButton(MediaController.mediaState)
     }

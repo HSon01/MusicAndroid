@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/list_music">
+    >
 
     <androidx.recyclerview.widget.RecyclerView
+        android:background="@color/background_hn"
         android:id="@+id/rv_album"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

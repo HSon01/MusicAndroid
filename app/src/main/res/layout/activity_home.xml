@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/purple_200"
+        android:background="#99BDDF"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/navigation_ChipNavigation"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,8 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:scrollHorizontally="true"
-                    android:textColor="@color/textSong" />
+                    android:textColor="@color/color_text_hn"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/creatorSong"
@@ -85,7 +86,7 @@
                     android:focusableInTouchMode="true"
                     android:scrollHorizontally="true"
                     android:text="@string/app_name"
-                    android:textColor="@color/textSong" />
+                    android:textColor="@color/color_text_hn" />
 
             </LinearLayout>
 
@@ -99,22 +100,22 @@
 
                 <ImageView
                     android:id="@+id/previous_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_previous" />
 
                 <ImageView
                     android:id="@+id/play_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_play" />
 
                 <ImageView
                     android:id="@+id/next_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_next" />
             </LinearLayout>
@@ -128,7 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/navigation_bar"
+        android:background="#507AAC"
         app:cnb_menuResource="@menu/bottom_menu"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:layout_constraintBottom_toBottomOf="parent"

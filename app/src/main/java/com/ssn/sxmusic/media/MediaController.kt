@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import com.ssn.sxmusic.media.SongManager.allSong
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.MEDIA_IDLE
@@ -68,7 +69,7 @@ object MediaController {
                 mediaPlayer?.start()
                 mediaState = MEDIA_PLAYING
             } catch (ex: Exception) {
-                songs.removeAt(currentPositionS)
+                allSong.remove(song)
                 when {
                     nextSong -> {
                         nextSong()

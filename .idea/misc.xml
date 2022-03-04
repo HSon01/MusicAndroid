@@ -32,11 +32,17 @@
         <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/layout/layout_custom_notification.xml" value="0.1453125" />
         <entry key="..\:/DoAnTH3/MusicAndroid/app/src/main/res/menu/nav_menu.xml" value="0.2015625" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/changebackgroud.xml" value="0.24635416666666668" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/circle_left_right_bottom.xml" value="0.22708333333333333" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/circle_left_right_top.xml" value="0.22708333333333333" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/custom_ic_circle.xml" value="0.22708333333333333" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_album.xml" value="0.22708333333333333" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_dynamic.xml" value="0.22135416666666666" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_favorite.xml" value="0.22135416666666666" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_favorite_border.xml" value="0.22135416666666666" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_home.xml" value="0.39375" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2630208333333333" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_love.xml" value="0.1398148148148148" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_next.xml" value="0.22708333333333333" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_repeat.xml" value="0.22135416666666666" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/ic_repeat_once.xml" value="0.21041666666666667" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/drawable/shape.xml" value="0.29010416666666666" />
@@ -64,6 +70,8 @@
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/layout/layout_custom_notification.xml" value="0.2890625" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/menu/bottom_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/menu/nav_menu.xml" value="0.2078125" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2630208333333333" />
+        <entry key="..\:/TH3_Android/MusicAndroidC/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2630208333333333" />
       </map>
     </option>
   </component>

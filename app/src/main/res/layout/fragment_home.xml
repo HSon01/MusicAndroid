@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/list_music"
+    android:background="@color/background_hn"
     tools:context=".ui.fragment.HomeFragment">
 
 
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="Hi! Xs"
-        android:textColor="@color/textSong"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideTop"
@@ -33,12 +33,15 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/guideMid"
-        app:layout_constraintTop_toTopOf="@id/view_g2">
+        app:layout_constraintTop_toTopOf="@id/view_g2"
+        app:layout_constraintVertical_bias="0.505"
+        tools:layout_editor_absoluteX="8dp">
 
         <TextView
             android:id="@+id/Category"
@@ -46,97 +49,20 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Category"
-            android:textColor="@color/textSong"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
         <LinearLayout
             android:id="@+id/itemDemo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_margin="8dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/view_g"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="#FF7449"
-                app:cardCornerRadius="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="12dp"
-                    android:text="Games"
-                    android:textColor="@color/textSong"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal|bottom"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/home3" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="#67A4FF"
-                app:cardCornerRadius="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="8dp"
-                    android:text="Vacation"
-                    android:textColor="@color/textSong"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal|bottom"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/home2" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="#FFA133"
-                app:cardCornerRadius="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="8dp"
-                    android:text="Education"
-                    android:textColor="@color/textSong"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal|bottom"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/home1" />
-            </androidx.cardview.widget.CardView>
-
         </LinearLayout>
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -152,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Featured Episodes"
-            android:textColor="@color/textSong"
+            android:textColor="@color/black"
             android:textSize="18sp"
             />
 
@@ -173,14 +99,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.46" />
+        app:layout_constraintGuide_percent="0.36" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="107dp" />
+        app:layout_constraintGuide_begin="63dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

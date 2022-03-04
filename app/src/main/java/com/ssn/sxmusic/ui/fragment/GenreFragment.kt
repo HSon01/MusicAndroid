@@ -28,7 +28,6 @@ class GenreFragment : Fragment(com.ssn.sxmusic.R.layout.fragment_genre), OnClick
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentGenreBinding.inflate(inflater, container, false)
-
         val adapter = setupRecyclerview()
         observerLivedata(adapter)
         return binding.root
@@ -43,7 +42,6 @@ class GenreFragment : Fragment(com.ssn.sxmusic.R.layout.fragment_genre), OnClick
     }
 
     private fun observerLivedata(adapter: AlbumAdapter) {
-        musicViewModel.getAlbum()
         musicViewModel.album.observe(viewLifecycleOwner, {
             adapter.setData(it)
         })

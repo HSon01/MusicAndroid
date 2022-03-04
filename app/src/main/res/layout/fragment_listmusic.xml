@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@color/list_music">
+    android:background="@color/background_hn">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchMusic"
@@ -14,7 +14,7 @@
         android:textCursorDrawable="@null"
         app:iconifiedByDefault="false"
         android:layout_margin="8dp"
-        android:background="@drawable/shapebgsearch"
+        android:background="@drawable/background_search"
         app:layout_constraintBottom_toTopOf="@+id/list_music"
         app:layout_constraintTop_toTopOf="parent"
         app:queryBackground="@null" />

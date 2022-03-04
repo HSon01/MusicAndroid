@@ -2,7 +2,6 @@ package com.ssn.sxmusic.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,16 +40,9 @@ class HomeFragment : Fragment(), OnClickItem {
 
     private fun observeLiveData() {
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
-            Log.d("AGT onStart", "CALL observeLiveData")
             musicAdapter.setData(it)
             MediaController.setListSong(it)
         })
-    }
-
-    override fun onStart() {
-        Log.d("AGT onStart", "CALL onStart")
-        musicViewModel.getSongs()
-        super.onStart()
     }
 
     override fun onClickListener(Song: Song) {

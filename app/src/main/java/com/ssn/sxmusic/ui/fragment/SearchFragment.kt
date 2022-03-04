@@ -37,7 +37,6 @@ class SearchFragment : Fragment(), OnClickItem {
     }
 
     private fun observerLivedata() {
-        musicViewModel.getSongs()
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
             musicAdapter.setData(it)
             MediaController.setListSong(it)
