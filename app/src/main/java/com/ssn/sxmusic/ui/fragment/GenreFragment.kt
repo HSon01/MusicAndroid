@@ -47,7 +47,7 @@ class GenreFragment : Fragment(com.ssn.sxmusic.R.layout.fragment_genre), OnClick
         })
     }
 
-    override fun onClickListener(x: SongsX) {
+    override fun onClickAlbumListener(x: SongsX) {
         MediaController.setListSong(x.songs)
         val action = GenreFragmentDirections.actionGenreFragmentToDetailAlbumFragment(x.name)
         findNavController().navigate(action)

@@ -31,7 +31,6 @@ class LoveFragment : Fragment(), OnClickItem, OnDeleteItem {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoveBinding.inflate(inflater, container, false)
-
         observerLivedata()
         setupRecyclerview()
         return binding.root
@@ -40,6 +39,7 @@ class LoveFragment : Fragment(), OnClickItem, OnDeleteItem {
     private fun observerLivedata() {
         musicViewModel.getFavoriteSongs().observe(viewLifecycleOwner, {
             musicAdapter.submitList(it)
+            MediaController.setListSong(it)
         })
     }
 

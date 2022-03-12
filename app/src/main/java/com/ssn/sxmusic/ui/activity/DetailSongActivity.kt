@@ -154,7 +154,7 @@ class DetailSongActivity : AppCompatActivity() {
         binding.timeMusic.text = Util.formatTime(MediaController.getDuration()!!.toLong())
         Glide.with(binding.imageSong).load(s.bgImage)
             .placeholder(R.drawable.ic_launcher_foreground)
-            .error(R.drawable.ic_launcher_foreground)
+            .error(R.drawable.logo_app_removebg)
             .into(binding.imageSong)
 
         val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)

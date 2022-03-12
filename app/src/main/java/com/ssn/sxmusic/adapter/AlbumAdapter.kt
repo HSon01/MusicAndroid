@@ -40,7 +40,7 @@ class AlbumAdapter(val onClick: OnClickAlbum) :
         fun bind(x: SongsX) {
             binding.tvTitleGenre.text = x.name
             binding.root.setOnClickListener {
-                onClick.onClickListener(x)
+                onClick.onClickAlbumListener(x)
             }
         }
     }

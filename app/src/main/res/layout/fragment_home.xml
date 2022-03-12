@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Hi! Xs"
+        android:text="@string/hi_xs"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -22,49 +22,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <View
-        android:id="@+id/view_g2"
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="#c0c0c0"
-        app:layout_constraintBottom_toTopOf="@+id/guideTop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+    <ImageView
+        android:id="@+id/rv_album"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/logo_splash"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/songs"
+        app:layout_constraintTop_toBottomOf="@id/welcome">
+
+
+    </ImageView>
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/guideMid"
-        app:layout_constraintTop_toTopOf="@id/view_g2"
-        app:layout_constraintVertical_bias="0.505"
-        tools:layout_editor_absoluteX="8dp">
-
-        <TextView
-            android:id="@+id/Category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Category"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:id="@+id/itemDemo"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_margin="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/view_g"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
+        android:id="@+id/songs"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -79,8 +53,7 @@
             android:layout_margin="10dp"
             android:text="Featured Episodes"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listSong"

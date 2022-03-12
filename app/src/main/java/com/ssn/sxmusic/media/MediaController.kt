@@ -99,7 +99,7 @@ object MediaController {
 
     fun nextSong() {
         currentPositionS++
-        if (currentPositionS >= songs.size - 1) {
+        if (currentPositionS > songs.size - 1) {
             currentPositionS = 0
         }
         currentSong = songs[currentPositionS]
@@ -114,7 +114,7 @@ object MediaController {
             currentPositionS--
         }
         currentSong = songs[currentPositionS]
-        playPauseSong(true, previousSong = true)
+        playPauseSong(true, nextSong = true)
     }
 
     fun getDuration(): Int? {

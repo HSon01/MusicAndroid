@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ssn.sxmusic.database.SongDatabase
 import com.ssn.sxmusic.media.SongManager
@@ -20,9 +21,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MusicViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
-
-    private var musics: Call<Musics> = MusicClient.invoke().getAllSong0()
     private val songDao = SongDatabase.getStudentDatabase(application).getSongDao()
+
+    init {
+        getAllMusic()
+    }
 
     private fun getSongs(): LiveData<ArrayList<Song>> = SongManager.listMusic
     val listMusic: LiveData<ArrayList<Song>>
@@ -31,6 +34,11 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
     private fun getAlbums(): LiveData<ArrayList<SongsX>> = SongManager.listAlbum
     val album: LiveData<ArrayList<SongsX>>
         get() = getAlbums()
+
+    private val _isActive = MutableLiveData<Boolean>()
+    val isActive: LiveData<Boolean>
+        get() = _isActive
+
 
     fun getFavoriteSongs(): LiveData<List<Song>> = songDao.getAllSong()
 
@@ -50,22 +58,28 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
     }
 
 
-    fun getAllMusic() {
+    private fun getAllMusic() {
         viewModelScope.launch {
+            var musics: Call<Musics> = MusicClient.invoke().getAllSong0()
             musics.enqueue(object : Callback<Musics> {
                 override fun onResponse(call: Call<Musics>, response: Response<Musics>) {
-                    response.body().let {
-                        if (it != null) {
-                            SongManager.musics = it
-                            SongManager.getSongAndAlbum()
-                            Log.d("AGT", "${SongManager.allSong.size}")
+                    if (response.isSuccessful) {
+                        _isActive.postValue(true)
+                        response.body().let {
+                            if (it != null) {
+                                SongManager.musics = it
+                                SongManager.getSongAndAlbum()
+                                Log.d("AGT", "${SongManager.allSong.size}")
+                            }
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<Musics>, t: Throwable) {
                     Log.d("AGT", "CALL API ERROR $t")
-                    musics = MusicClient.invoke().getAllSong0()
+                    viewModelScope.launch {
+                        musics = MusicClient.invoke().getAllSong0()
+                    }
                 }
             })
         }
