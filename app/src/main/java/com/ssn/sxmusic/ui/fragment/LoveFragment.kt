@@ -26,6 +26,7 @@ class LoveFragment : Fragment(), OnClickItem, OnDeleteItem {
     private lateinit var binding: FragmentLoveBinding
     private val musicViewModel: MusicViewModel by viewModels()
     private var musicAdapter: FavoritesAdapter = FavoritesAdapter(this, this)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,13 +34,18 @@ class LoveFragment : Fragment(), OnClickItem, OnDeleteItem {
         binding = FragmentLoveBinding.inflate(inflater, container, false)
         observerLivedata()
         setupRecyclerview()
+        Log.d("AVG","onCreateView")
         return binding.root
     }
 
+
+
     private fun observerLivedata() {
         musicViewModel.getFavoriteSongs().observe(viewLifecycleOwner, {
-            musicAdapter.submitList(it)
-            MediaController.setListSong(it)
+            if(it.isNotEmpty()){
+                musicAdapter.submitList(it)
+                MediaController.setListSong(it)
+            }
         })
     }
 
@@ -50,10 +56,12 @@ class LoveFragment : Fragment(), OnClickItem, OnDeleteItem {
     }
 
 
-    override fun onStart() {
+
+    override fun onResume() {
         observerLivedata()
-        super.onStart()
+        super.onResume()
     }
+
 
 
     override fun onClickListener(Song: Song) {
