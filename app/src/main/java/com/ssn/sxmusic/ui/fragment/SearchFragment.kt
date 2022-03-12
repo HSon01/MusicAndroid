@@ -18,6 +18,7 @@ import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
 import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,17 +36,19 @@ class SearchFragment : Fragment(), OnClickItem {
         binding = FragmentListmusicBinding.inflate(inflater, container, false)
         setupRecyclerview()
         observerLivedata()
-        searchMusic()
         return binding.root
     }
 
     private fun observerLivedata() {
-        lifecycleScope.launch {
-            musicViewModel.listMusic.observe(viewLifecycleOwner, {
-                musicAdapter.setData(it)
-                MediaController.setListSong(it)
-            })
-        }
+        musicViewModel.listMusic.observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    musicAdapter.setData(it)
+                    MediaController.setListSong(it)
+                }
+                searchMusic()
+            }
+        })
     }
 
     private fun setupRecyclerview() {
@@ -62,20 +65,18 @@ class SearchFragment : Fragment(), OnClickItem {
 
 
     private fun searchMusic() {
-        lifecycleScope.launch {
-            binding.searchMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-                androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                        musicAdapter.filter.filter(query)
-                    return false
-                }
+        binding.searchMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                musicAdapter.filter.filter(query)
+                return false
+            }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                        musicAdapter.filter.filter(newText)
-                    return false
-                }
-            })
-        }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                musicAdapter.filter.filter(newText)
+                return false
+            }
+        })
     }
 }
 
