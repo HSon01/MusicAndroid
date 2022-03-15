@@ -36,6 +36,7 @@ class SearchFragment : Fragment(), OnClickItem {
         binding = FragmentListmusicBinding.inflate(inflater, container, false)
         setupRecyclerview()
         observerLivedata()
+        searchMusic()
         return binding.root
     }
 
@@ -46,9 +47,9 @@ class SearchFragment : Fragment(), OnClickItem {
                     musicAdapter.setData(it)
                     MediaController.setListSong(it)
                 }
-                searchMusic()
             }
         })
+
     }
 
     private fun setupRecyclerview() {
@@ -68,7 +69,7 @@ class SearchFragment : Fragment(), OnClickItem {
 
 
     private fun searchMusic() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             binding.searchMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
                 androidx.appcompat.widget.SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {

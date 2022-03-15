@@ -29,7 +29,6 @@ import com.ssn.sxmusic.util.Const.NOTIFICATION_ID
 import com.ssn.sxmusic.util.Const.REQUEST_CODE_NOTIFICATION
 import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
 import com.ssn.sxmusic.util.Util
-import javax.inject.Inject
 
 
 
@@ -108,7 +107,7 @@ class MusicService : Service() {
 
         val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
             addNextIntentWithParentStack(resultIntent)
-            getPendingIntent(REQUEST_CODE_NOTIFICATION,  PendingIntent.FLAG_NO_CREATE)
+            getPendingIntent(REQUEST_CODE_NOTIFICATION,PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
 
