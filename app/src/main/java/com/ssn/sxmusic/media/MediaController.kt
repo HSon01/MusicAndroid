@@ -55,10 +55,10 @@ object MediaController {
     }
 
 
-    fun setCurrentSong(index: Int) {
-        currentPositionS = index
-        currentSong = songs[currentPositionS]
-    }
+//    fun setCurrentSong(index: Int) {
+//        currentPositionS = index
+//        currentSong = songs[currentPositionS]
+//    }
 
 
     fun playPauseSong(
@@ -133,10 +133,12 @@ object MediaController {
         return mediaPlayer?.currentPosition
     }
 
-    fun findSongByPosition(s: Song): Int {
+    fun findAndSetSong(s: Song):Int {
         for (i in 0 until songs.size) {
             if (songs[i] == s) {
-                return i
+                currentPositionS = i
+                currentSong = s
+                return 1
             }
         }
         return -1

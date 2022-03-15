@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ssn.sxmusic.database.SongDatabase
+import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.media.SongManager
 import com.ssn.sxmusic.model.Musics
 import com.ssn.sxmusic.model.Song
@@ -55,6 +56,12 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
             return true
         }
         return false
+    }
+
+    fun setSongCurrent(s: Song){
+        viewModelScope.launch {
+            MediaController.findAndSetSong(s)
+        }
     }
 
 

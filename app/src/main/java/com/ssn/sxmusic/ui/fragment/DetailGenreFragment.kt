@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,6 +17,7 @@ import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.OnClickItem
+import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ import kotlinx.coroutines.launch
 class DetailGenreFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentDetailGenreBinding
     private val args: DetailGenreFragmentArgs by navArgs()
+    private val musicViewModel: MusicViewModel by viewModels()
     private var musicAdapter: SongsAdapter = SongsAdapter(this)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,9 +50,12 @@ class DetailGenreFragment : Fragment(), OnClickItem {
     }
 
     override fun onClickListener(Song: Song) {
-        val intent = Intent(Const.FRAGMENT_SEND_DATA)
-        MediaController.setCurrentSong(MediaController.findSongByPosition(Song))
-        context?.sendBroadcast(intent)
+        musicViewModel.setSongCurrent(Song)
+        lifecycleScope.launch {
+            val intent = Intent(Const.FRAGMENT_SEND_DATA)
+            context?.sendBroadcast(intent)
+        }
+
     }
 
     private fun onClick() {

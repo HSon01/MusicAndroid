@@ -43,8 +43,8 @@ class HomeFragment : Fragment(), OnClickItem {
 
     private fun observeLiveData() {
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
-            if (it.isNotEmpty()){
-                lifecycleScope.launch(Dispatchers.IO)  {
+            if (it.isNotEmpty()) {
+                lifecycleScope.launch(Dispatchers.IO) {
                     musicAdapter.setData(it)
                     MediaController.setListSong(it)
                 }
@@ -53,9 +53,11 @@ class HomeFragment : Fragment(), OnClickItem {
     }
 
     override fun onClickListener(Song: Song) {
-        val intent = Intent(Const.FRAGMENT_SEND_DATA)
-        MediaController.setCurrentSong(MediaController.findSongByPosition(Song))
-        context?.sendBroadcast(intent)
+        musicViewModel.setSongCurrent(Song)
+        lifecycleScope.launch {
+            val intent = Intent(Const.FRAGMENT_SEND_DATA)
+            context?.sendBroadcast(intent)
+        }
     }
 
 }

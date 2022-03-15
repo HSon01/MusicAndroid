@@ -66,11 +66,11 @@ class LoveFragment : Fragment(), OnClickItem, OnDeleteItem {
 
     override fun onClickListener(Song: Song) {
         val intent = Intent(Const.FRAGMENT_SEND_DATA)
-        val result = MediaController.findSongByPosition(Song)
+        val result = MediaController.findAndSetSong(Song)
         if( result == -1){
             MediaController.currentSong = Song
         }else{
-            MediaController.setCurrentSong(MediaController.findSongByPosition(Song))
+            musicViewModel.setSongCurrent(Song)
         }
         context?.sendBroadcast(intent)
     }

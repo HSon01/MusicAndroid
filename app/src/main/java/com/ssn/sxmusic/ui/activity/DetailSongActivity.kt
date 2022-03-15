@@ -62,11 +62,12 @@ class DetailSongActivity : AppCompatActivity() {
     private fun showUI() {
         seekBar = binding.seekBar
         MediaController.currentSong?.let {
-            binding.nameMusic.text = it.title
-            binding.creatorMusic.text = it.creator
-            binding.timeMusic.text = Util.formatTime(MediaController.getDuration()!!.toLong())
             val isLink = URLUtil.isValidUrl(it.bgImage)
             if (!this.isDestroyed) {
+                binding.nameMusic.text = it.title
+                binding.creatorMusic.text = it.creator
+                binding.timeMusic.text = Util.formatTime(MediaController.getDuration()!!.toLong())
+
                 if (!isLink) {
                     binding.imageSong.setImageResource(R.drawable.logo_app_removebg)
                 } else {
@@ -75,22 +76,27 @@ class DetailSongActivity : AppCompatActivity() {
                         .placeholder(R.drawable.logo_app_removebg)
                         .into(binding.imageSong)
                 }
-            }
-            val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
-            if (loop == MEDIA_LOOP_ONE) {
-                binding.repeat.setImageResource(R.drawable.ic_repeat_once)
-            }
-            lifecycleScope.launch(Dispatchers.Main) {
-                if (musicViewModel.findSongByName(it.title)) {
-                    binding.love.setImageResource(R.drawable.ic_favorite_border)
-                } else {
-                    binding.love.setImageResource(R.drawable.ic_favorite)
-                }
-            }
-            seekBar.max = MediaController.getDuration()!!
-            onSeekBarChange()
-        }
+                seekBar.max = MediaController.getDuration()!!
+                onSeekBarChange()
 
+                lifecycleScope.launch(Dispatchers.Main) {
+                    if (musicViewModel.findSongByName(it.title)) {
+                        binding.love.setImageResource(R.drawable.ic_favorite_border)
+                    } else {
+                        binding.love.setImageResource(R.drawable.ic_favorite)
+                    }
+                }
+
+            }
+            loopSong()
+        }
+    }
+
+    private fun loopSong() {
+        val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
+        if (loop == MEDIA_LOOP_ONE) {
+            binding.repeat.setImageResource(R.drawable.ic_repeat_once)
+        }
     }
 
 

@@ -58,9 +58,12 @@ class SearchFragment : Fragment(), OnClickItem {
     }
 
     override fun onClickListener(Song: Song) {
-        MediaController.setCurrentSong(MediaController.findSongByPosition(Song))
-        val intent = Intent(Const.FRAGMENT_SEND_DATA)
-        requireActivity().sendBroadcast(intent)
+        musicViewModel.setSongCurrent(Song)
+        lifecycleScope.launch {
+            val intent = Intent(Const.FRAGMENT_SEND_DATA)
+            requireActivity().sendBroadcast(intent)
+        }
+
     }
 
 
