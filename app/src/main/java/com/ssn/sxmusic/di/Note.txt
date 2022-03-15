@@ -1,0 +1,6 @@
+Những Thứ Không thể tạo đc chúng ta dùng @Module
+
+         android:launchMode="singleTop"
+         android:clearTaskOnLaunch="true"
+                     android:taskAffinity=""
+                     android:excludeFromRecents="true"

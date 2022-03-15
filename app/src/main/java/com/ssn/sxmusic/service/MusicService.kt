@@ -31,13 +31,15 @@ import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
 import com.ssn.sxmusic.util.Util
 import javax.inject.Inject
 
-//@AndroidEntryPoint
-class MusicService @Inject constructor(): Service() {
+
+
+
+class MusicService : Service() {
     private val mediaController = MediaController
     private lateinit var context: Context
     private var musicB = MusicBroadCast()
     private var binderMusicService = MusicBinder()
-    private lateinit var pendingIntent: PendingIntent
+
 
 
     override fun onBind(intent: Intent?): IBinder {
@@ -88,7 +90,7 @@ class MusicService @Inject constructor(): Service() {
 
         if (mediaController.getIsPlay() == Const.MEDIA_PLAYING) {
             remoteView.setOnClickPendingIntent(R.id.play, pendingIntent(this, ACTION_PAUSE))
-            remoteView.setImageViewResource(R.id.play, R.drawable.ic_pause)
+            remoteView.setImageViewResource(R.id.play,R.drawable.ic_pause)
         } else {
             remoteView.setOnClickPendingIntent(R.id.play, pendingIntent(this, ACTION_PLAYING))
             remoteView.setImageViewResource(R.id.play, R.drawable.ic_play)
@@ -99,22 +101,21 @@ class MusicService @Inject constructor(): Service() {
         remoteView.setOnClickPendingIntent(R.id.previous, pendingIntent(this, ACTION_PREVIOUS))
 
 
+
         val resultIntent = Intent(this, DetailSongActivity::class.java)
-        val stackBuilder: TaskStackBuilder = TaskStackBuilder.create(this)
-        stackBuilder.addNextIntentWithParentStack(resultIntent)
+            .apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK}
 
-
-        pendingIntent =
-            stackBuilder.getPendingIntent(
-                REQUEST_CODE_NOTIFICATION,
-                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_UPDATE_CURRENT
-            )
+        val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(resultIntent)
+            getPendingIntent(REQUEST_CODE_NOTIFICATION,  PendingIntent.FLAG_NO_CREATE)
+        }
 
 
         val noti = NotificationCompat.Builder(this, ID_APPLICATION)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.logo_app_removebg)
             .setCustomContentView(remoteView)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(resultPendingIntent)
             .setSound(null)
 
         startForeground(NOTIFICATION_ID, noti.build())

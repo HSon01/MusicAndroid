@@ -68,18 +68,20 @@ class SearchFragment : Fragment(), OnClickItem {
 
 
     private fun searchMusic() {
-        binding.searchMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                musicAdapter.filter.filter(query)
-                return false
-            }
+        lifecycleScope.launch {
+            binding.searchMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    musicAdapter.filter.filter(query)
+                    return false
+                }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                musicAdapter.filter.filter(newText)
-                return false
-            }
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    musicAdapter.filter.filter(newText)
+                    return false
+                }
+            })
+        }
     }
 }
 

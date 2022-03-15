@@ -34,9 +34,8 @@
         </activity>
         <activity
             android:theme="@style/AnimationDetail"
-            android:name="com.ssn.sxmusic.ui.activity.DetailSongActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:name="com.ssn.sxmusic.ui.activity.DetailSongActivity"
             android:parentActivityName=".ui.activity.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

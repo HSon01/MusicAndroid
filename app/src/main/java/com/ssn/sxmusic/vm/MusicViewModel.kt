@@ -6,13 +6,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.ssn.sxmusic.database.SongDatabase
+import com.ssn.sxmusic.database.SongDao
 import com.ssn.sxmusic.media.MediaController
 import com.ssn.sxmusic.media.SongManager
 import com.ssn.sxmusic.model.Musics
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.model.SongsX
-import com.ssn.sxmusic.network.MusicClient
+import com.ssn.sxmusic.network.MusicApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -21,8 +21,13 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class MusicViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
-    private val songDao = SongDatabase.getStudentDatabase(application).getSongDao()
+class MusicViewModel @Inject constructor(
+    application: Application,
+    private val songDao: SongDao,
+    private val musicNetWork: MusicApi
+) : AndroidViewModel(application) {
+    //    private val songDao = SongDatabase.getStudentDatabase(application).getSongDao()
+
 
     init {
         getAllMusic()
@@ -58,7 +63,7 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
         return false
     }
 
-    fun setSongCurrent(s: Song){
+    fun setSongCurrent(s: Song) {
         viewModelScope.launch {
             MediaController.findAndSetSong(s)
         }
@@ -67,7 +72,8 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
 
     private fun getAllMusic() {
         viewModelScope.launch {
-            var musics: Call<Musics> = MusicClient.invoke().getAllSong0()
+//            var musics: Call<Musics> = MusicClient.invoke().getAllSong0()
+            var musics: Call<Musics> = musicNetWork.getSongs()
             musics.enqueue(object : Callback<Musics> {
                 override fun onResponse(call: Call<Musics>, response: Response<Musics>) {
                     if (response.isSuccessful) {
@@ -85,7 +91,7 @@ class MusicViewModel @Inject constructor(application: Application) : AndroidView
                 override fun onFailure(call: Call<Musics>, t: Throwable) {
                     Log.d("AGT", "CALL API ERROR $t")
                     viewModelScope.launch {
-                        musics = MusicClient.invoke().getAllSong0()
+                        musics = musicNetWork.getSongs()
                     }
                 }
             })
