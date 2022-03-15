@@ -36,7 +36,7 @@ class SearchFragment : Fragment(), OnClickItem {
         binding = FragmentListmusicBinding.inflate(inflater, container, false)
         setupRecyclerview()
         observerLivedata()
-        searchMusic()
+
         return binding.root
     }
 
@@ -56,6 +56,7 @@ class SearchFragment : Fragment(), OnClickItem {
         binding.listMusic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.listMusic.adapter = musicAdapter
+        binding.searchMusic.setOnQueryTextListener(onQueryTextListener)
     }
 
     override fun onClickListener(Song: Song) {
@@ -68,20 +69,21 @@ class SearchFragment : Fragment(), OnClickItem {
     }
 
 
-    private fun searchMusic() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            binding.searchMusic.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-                androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    musicAdapter.filter.filter(query)
-                    return false
-                }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    musicAdapter.filter.filter(newText)
-                    return false
-                }
-            })
+    private val onQueryTextListener = object : SearchView.OnQueryTextListener,
+        androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            lifecycleScope.launch(Dispatchers.Main) {
+                musicAdapter.filter.filter(query)
+            }
+            return false
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            lifecycleScope.launch(Dispatchers.Main) {
+                musicAdapter.filter.filter(newText)
+            }
+            return false
         }
     }
 }

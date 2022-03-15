@@ -14,6 +14,7 @@ import com.ssn.sxmusic.util.OnClickItem
 class SongsAdapter(val onClick: OnClickItem) :
     ListAdapter<Song, SongsAdapter.ViewHolder>(SongsDiff), Filterable {
     private var list: ArrayList<Song> = arrayListOf()
+    private val filteredList: ArrayList<Song> = arrayListOf()
 
     fun setData(list: ArrayList<Song>) {
         this.list = list
@@ -51,19 +52,19 @@ class SongsAdapter(val onClick: OnClickItem) :
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val filteredList: ArrayList<Song> = arrayListOf()
+                filteredList.clear()
+                val results = FilterResults()
                 if (constraint == null || constraint.isEmpty()) {
                     filteredList.addAll(list)
                 } else {
-                    for (item in list) {
-                        if (item.title.toLowerCase()
-                                .startsWith(constraint.toString().toLowerCase())
+                    list.forEach {
+                        if (it.title.toLowerCase().trim()
+                                .startsWith(constraint.toString().toLowerCase().trim())
                         ) {
-                            filteredList.add(item)
+                            filteredList.add(it)
                         }
                     }
                 }
-                val results = FilterResults()
                 results.values = filteredList
                 return results
             }
@@ -71,6 +72,7 @@ class SongsAdapter(val onClick: OnClickItem) :
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 submitList(results?.values as ArrayList<Song>)
+                notifyDataSetChanged()
             }
         }
     }
