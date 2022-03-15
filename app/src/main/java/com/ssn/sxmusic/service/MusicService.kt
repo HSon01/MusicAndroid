@@ -15,6 +15,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.ssn.sxmusic.R
 import com.ssn.sxmusic.media.MediaController
+import com.ssn.sxmusic.media.MediaController.setStateLive
 import com.ssn.sxmusic.ui.activity.DetailSongActivity
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_CLEAR
@@ -175,7 +176,7 @@ class MusicService @Inject constructor(): Service() {
                     stopForeground(true)
                 }else{
                     stopSelf()
-                    mediaController.mediaPlayer?.stop()
+                    setStateLive(Const.MEDIA_PAUSED)
                 }
                 return
             }

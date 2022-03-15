@@ -97,11 +97,15 @@ object MediaController {
             mediaState = MEDIA_PLAYING
         }
         context.sendBroadcast(intent)
-        stateLiveMedia.postValue(mediaState)
+        setStateLive(mediaState)
     }
 
     fun getIsPlay(): Int {
         return mediaState
+    }
+
+    fun setStateLive(state:Int){
+        stateLiveMedia.postValue(state)
     }
 
 
