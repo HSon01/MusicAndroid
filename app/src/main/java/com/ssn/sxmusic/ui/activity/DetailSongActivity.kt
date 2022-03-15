@@ -1,6 +1,5 @@
 package com.ssn.sxmusic.ui.activity
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -16,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.ssn.sxmusic.R
 import com.ssn.sxmusic.databinding.ActivityDetailSongBinding
 import com.ssn.sxmusic.media.MediaController
-import com.ssn.sxmusic.model.Song
+import com.ssn.sxmusic.media.MediaController.mediaStateLiveData
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_NEXT
 import com.ssn.sxmusic.util.Const.ACTION_PAUSE
@@ -51,25 +50,47 @@ class DetailSongActivity : AppCompatActivity() {
         this.runOnUiThread(updateUi)
     }
 
-
     private fun initView() {
         binding = ActivityDetailSongBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sharedPrefControl.prefController(this) //Loop Song
         supportActionBar!!.hide()
-        setStatusButton()
         onclickItem()
-
+        setStatusButton()
     }
 
     private fun showUI() {
         seekBar = binding.seekBar
-        MediaController.currentSong?.let { showInfoSong(it) }
-    }
+        MediaController.currentSong?.let {
+            binding.nameMusic.text = it.title
+            binding.creatorMusic.text = it.creator
+            binding.timeMusic.text = Util.formatTime(MediaController.getDuration()!!.toLong())
+            val isLink = URLUtil.isValidUrl(it.bgImage)
+            if (!this.isDestroyed) {
+                if (!isLink) {
+                    binding.imageSong.setImageResource(R.drawable.logo_app_removebg)
+                } else {
+                    Glide.with(binding.imageSong)
+                        .load(it.bgImage)
+                        .placeholder(R.drawable.logo_app_removebg)
+                        .into(binding.imageSong)
+                }
+            }
+            val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
+            if (loop == MEDIA_LOOP_ONE) {
+                binding.repeat.setImageResource(R.drawable.ic_repeat_once)
+            }
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (musicViewModel.findSongByName(it.title)) {
+                    binding.love.setImageResource(R.drawable.ic_favorite_border)
+                } else {
+                    binding.love.setImageResource(R.drawable.ic_favorite)
+                }
+            }
+            seekBar.max = MediaController.getDuration()!!
+            onSeekBarChange()
+        }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Glide.with(applicationContext).pauseRequests()
     }
 
 
@@ -91,17 +112,6 @@ class DetailSongActivity : AppCompatActivity() {
     }
 
 
-    override fun onStart() {
-        stopSeekbar = false
-        super.onStart()
-    }
-
-    override fun onStop() {
-        stopSeekbar = true
-        super.onStop()
-    }
-
-
     private fun onclickItem() {
         binding.playMusic.setOnClickListener {
             if (MediaController.mediaState == Const.MEDIA_PLAYING) {
@@ -109,7 +119,6 @@ class DetailSongActivity : AppCompatActivity() {
             } else {
                 sendActionToService(ACTION_PLAYING)
             }
-            setStatusButton()
         }
 
         binding.bntNext.setOnClickListener {
@@ -132,6 +141,7 @@ class DetailSongActivity : AppCompatActivity() {
                 }
             }
         }
+
         binding.love.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 MediaController.currentSong?.let {
@@ -155,40 +165,6 @@ class DetailSongActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("CheckResult")
-    private fun showInfoSong(s: Song) {
-        binding.nameMusic.text = s.title
-        binding.creatorMusic.text = s.creator
-        binding.timeMusic.text = Util.formatTime(MediaController.getDuration()!!.toLong())
-        val isLink = URLUtil.isValidUrl(s.bgImage)
-        if (!this.isDestroyed) {
-            if(!isLink){
-                binding.imageSong.setImageResource(R.drawable.logo_app_removebg)
-            }else{
-                Glide.with(binding.imageSong)
-                    .load(s.bgImage)
-                    .placeholder(R.drawable.logo_app_removebg)
-                    .into(binding.imageSong)
-            }
-        }
-
-        val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
-        if (loop == MEDIA_LOOP_ONE) {
-            binding.repeat.setImageResource(R.drawable.ic_repeat_once)
-        }
-
-        lifecycleScope.launch(Dispatchers.Main) {
-            if (musicViewModel.findSongByName(s.title)) {
-                binding.love.setImageResource(R.drawable.ic_favorite_border)
-            } else {
-                binding.love.setImageResource(R.drawable.ic_favorite)
-            }
-        }
-
-        seekBar.max = MediaController.getDuration()!!
-        onSeekBarChange()
-    }
-
     private fun onSeekBarChange() {
         seekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -208,22 +184,36 @@ class DetailSongActivity : AppCompatActivity() {
         sendBroadcast(intentNext)
     }
 
+
     private fun setStatusButton() {
-        val isPlay = MediaController.mediaState
-        if (isPlay == Const.MEDIA_PLAYING) {
-            val animation: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_image)
-            binding.imageSong.startAnimation(animation)
-            binding.playMusic.setImageResource(R.drawable.ic_pause)
-        } else {
-            binding.playMusic.setImageResource(R.drawable.ic_play)
-            binding.imageSong.clearAnimation()
-        }
+        mediaStateLiveData.observe(this, {
+            if (it == Const.MEDIA_PLAYING) {
+                binding.playMusic.setImageResource(R.drawable.ic_pause)
+                val animation: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_image)
+                binding.imageSong.startAnimation(animation)
+            } else {
+                binding.playMusic.setImageResource(R.drawable.ic_play)
+                binding.imageSong.clearAnimation()
+            }
+        })
     }
 
 
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down)
+        binding.imageSong.clearAnimation()
+        stopSeekbar = true
+    }
+
+    override fun onStart() {
+        stopSeekbar = false
+        super.onStart()
+    }
+
+    override fun onStop() {
+        stopSeekbar = true
+        super.onStop()
     }
 
 }

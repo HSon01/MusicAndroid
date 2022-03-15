@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.ssn.sxmusic.media.SongManager.allSong
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.Const
@@ -22,7 +24,12 @@ object MediaController {
     private var currentPositionS = 0
     private lateinit var context: Context
     var currentSong: Song? = null
+
     var mediaState = MEDIA_IDLE
+    private var stateLiveMedia = MutableLiveData<Int>()
+    val mediaStateLiveData: LiveData<Int>
+        get() = stateLiveMedia
+
     private val sharedPrefControl = PrefControllerSingleton
 
     fun mediaController(c: Context) {
@@ -90,6 +97,7 @@ object MediaController {
             mediaState = MEDIA_PLAYING
         }
         context.sendBroadcast(intent)
+        stateLiveMedia.postValue(mediaState)
     }
 
     fun getIsPlay(): Int {

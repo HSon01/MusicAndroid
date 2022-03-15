@@ -4,7 +4,7 @@
     <dimen name="progressbar_splash_height">30dp</dimen>
     <dimen name="now_play">16sp</dimen>
     <dimen name="height_top">56dp</dimen>
-    <dimen name="bnt_back">30dp</dimen>
+    <dimen name="bnt_back">40dp</dimen>
     <dimen name="marginStart_20">20dp</dimen>
     <dimen name="CornerRadius_image">25dp</dimen>
     <dimen name="width_image">300dp</dimen>

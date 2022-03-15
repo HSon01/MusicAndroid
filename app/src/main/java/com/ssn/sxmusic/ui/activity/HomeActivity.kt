@@ -1,11 +1,10 @@
 package com.ssn.sxmusic.ui.activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.webkit.URLUtil
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -17,11 +16,9 @@ import com.ismaeldivita.chipnavigation.ChipNavigationBar
 import com.ssn.sxmusic.R
 import com.ssn.sxmusic.databinding.ActivityHomeBinding
 import com.ssn.sxmusic.media.MediaController
-import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.service.MusicService
 import com.ssn.sxmusic.util.Const
 import com.ssn.sxmusic.util.Const.ACTION_PLAYING
-import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
 import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.ssn.sxmusic.util.Const.MEDIA_PLAYING as MEDIA_PLAYING1
@@ -31,39 +28,36 @@ class HomeActivity : AppCompatActivity() {
     private val musicViewModel: MusicViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
-    private val mBReceiver = SongBReceiver()
+    private val handler = Handler()
 
-    inner class SongBReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, p1: Intent?) {
-            p1?.action?.let { handleActionMusic(it) }
-        }
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
+        this.runOnUiThread(updateUi)
+    }
+
+    private fun initView(){
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        registerReceiver()
         settingView()
         onclickItem()
+        setStatusButton()
     }
 
-    override fun onDestroy() {
-        unregisterReceiver(mBReceiver)
-        super.onDestroy()
-    }
-
-    private fun registerReceiver() {
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(SERVICE_SEND_DATA)
-        registerReceiver(mBReceiver, intentFilter)
+    private val updateUi by lazy {
+        object : Runnable {
+            override fun run() {
+                showUi()
+                handler.postDelayed(this, 500)
+            }
+        }
     }
 
 
     override fun onStart() {
         if (MediaController.mediaState == MEDIA_PLAYING1) {
-            showUi()
             binding.menuPlay.visibility = View.VISIBLE
         }
         super.onStart()
@@ -91,26 +85,17 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
-    private fun handleActionMusic(Action: String) {
-        setStatusButton(MediaController.mediaState)
-        when (Action) {
-            SERVICE_SEND_DATA -> {
-                showUi()
-                binding.menuPlay.visibility = View.VISIBLE
-                return
+    private fun setStatusButton() {
+        MediaController.mediaStateLiveData.observe(this, {
+            if (it == Const.MEDIA_PLAYING) {
+                binding.playBtn.setImageResource(R.drawable.ic_pause)
+            } else {
+                binding.playBtn.setImageResource(R.drawable.ic_play)
             }
-        }
+        })
     }
 
 
-    private fun setStatusButton(isPlay: Int) {
-        if (isPlay == MEDIA_PLAYING1) {
-            binding.playBtn.setImageResource(R.drawable.ic_pause)
-        } else {
-            binding.playBtn.setImageResource(R.drawable.ic_play)
-        }
-
-    }
 
     private fun onclickItem() {
         binding.playBtn.setOnClickListener {
@@ -143,14 +128,24 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showUi() {
-        val s: Song? = MediaController.currentSong
-        binding.nameSong.text = s?.title
-        binding.creatorSong.text = s?.creator
-        Glide.with(binding.imageSong).load(s?.bgImage)
-            .placeholder(R.mipmap.ic_launcher_round)
-            .error(R.drawable.ic_album)
-            .into(binding.imageSong)
-        setStatusButton(MediaController.mediaState)
+        if (MediaController.mediaState == MEDIA_PLAYING1) {
+            binding.menuPlay.visibility = View.VISIBLE
+            MediaController.currentSong?.let{
+                binding.nameSong.text = it.title
+                binding.creatorSong.text = it.creator
+                val isLink = URLUtil.isValidUrl(it.bgImage)
+                if (!this.isDestroyed) {
+                    if(!isLink){
+                        binding.imageSong.setImageResource(R.drawable.logo_app_removebg)
+                    }else{
+                        Glide.with(binding.imageSong)
+                            .load(it.bgImage)
+                            .placeholder(R.drawable.ic_album)
+                            .into(binding.imageSong)
+                    }
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
