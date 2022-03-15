@@ -28,9 +28,10 @@ import com.ssn.sxmusic.util.Const.NOTIFICATION_ID
 import com.ssn.sxmusic.util.Const.REQUEST_CODE_NOTIFICATION
 import com.ssn.sxmusic.util.Const.SERVICE_SEND_DATA
 import com.ssn.sxmusic.util.Util
+import javax.inject.Inject
 
 //@AndroidEntryPoint
-class MusicService : Service() {
+class MusicService @Inject constructor(): Service() {
     private val mediaController = MediaController
     private lateinit var context: Context
     private var musicB = MusicBroadCast()
@@ -100,22 +101,13 @@ class MusicService : Service() {
         val resultIntent = Intent(this, DetailSongActivity::class.java)
         val stackBuilder: TaskStackBuilder = TaskStackBuilder.create(this)
         stackBuilder.addNextIntentWithParentStack(resultIntent)
+
+
         pendingIntent =
             stackBuilder.getPendingIntent(
                 REQUEST_CODE_NOTIFICATION,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_UPDATE_CURRENT
             )
-
-
-        // Start DetailSong But Not Activity Back Stack
-//            resultIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//            pendingIntent =
-//                PendingIntent.getActivity(
-//                    this,
-//                    REQUEST_CODE_NOTIFICATION,
-//                    resultIntent,
-//                    PendingIntent.FLAG_UPDATE_CURRENT
-//                )
 
 
         val noti = NotificationCompat.Builder(this, ID_APPLICATION)

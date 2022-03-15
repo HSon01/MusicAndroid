@@ -1,14 +1,12 @@
 package com.ssn.sxmusic.ui.activity
 
-import android.content.BroadcastReceiver
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.webkit.URLUtil
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.activity.viewModels
@@ -32,6 +30,7 @@ import com.ssn.sxmusic.util.Util
 import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -40,69 +39,77 @@ import kotlinx.coroutines.withContext
 class DetailSongActivity : AppCompatActivity() {
     lateinit var binding: ActivityDetailSongBinding
     private lateinit var seekBar: SeekBar
-    private val mBReceiver = SongBReceiver()
     var stopSeekbar = false
     private val sharedPrefControl = PrefControllerSingleton
-
-    //    private val musicViewModel: MusicViewModel by viewModels()
     private val musicViewModel: MusicViewModel by viewModels()
+    private val handler = Handler()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView()
+        this.runOnUiThread(updateUi)
+    }
+
+
+    private fun initView() {
         binding = ActivityDetailSongBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        onclickItem()
+        sharedPrefControl.prefController(this) //Loop Song
         supportActionBar!!.hide()
+        setStatusButton()
+        onclickItem()
+
+    }
+
+    private fun showUI() {
         seekBar = binding.seekBar
-        setStatusButton(MediaController.mediaState)
         MediaController.currentSong?.let { showInfoSong(it) }
-        sharedPrefControl.prefController(this)
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Glide.with(applicationContext).pauseRequests()
     }
 
 
-    override fun onStart() {
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(Const.SERVICE_SEND_DATA)
-        registerReceiver(mBReceiver, intentFilter)
-        stopSeekbar = false
-        super.onStart()
-    }
-
-    override fun onStop() {
-        Log.d("TAG", "DETAOL onStop")
-        unregisterReceiver(mBReceiver)
-        stopSeekbar = true
-        super.onStop()
-    }
-
-
-    inner class SongBReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, p1: Intent?) {
-            Log.d("TAG_LOG", "DetailSong , ${p1?.action}")
-            p1?.action?.let {
-                handleActionMusic()
+    private val updateUi by lazy {
+        object : Runnable {
+            override fun run() {
+                showUI()
+                if (!stopSeekbar) {
+                    try {
+                        binding.timeCurrentMusic.text = Util.formatTime(seekBar.progress.toLong())
+                        seekBar.progress = MediaController.getCurrentPosition()!!
+                    } catch (e: Exception) {
+                        seekBar.progress = 0
+                    }
+                }
+                handler.postDelayed(this, 500)
             }
         }
     }
 
 
-    private fun handleActionMusic() {
-        MediaController.currentSong?.let { showInfoSong(it) }
-        setStatusButton(MediaController.mediaState)
+    override fun onStart() {
+        stopSeekbar = false
+        super.onStart()
+    }
+
+    override fun onStop() {
+        stopSeekbar = true
+        super.onStop()
     }
 
 
     private fun onclickItem() {
-
         binding.playMusic.setOnClickListener {
             if (MediaController.mediaState == Const.MEDIA_PLAYING) {
                 sendActionToService(ACTION_PAUSE)
             } else {
                 sendActionToService(ACTION_PLAYING)
             }
+            setStatusButton()
         }
 
         binding.bntNext.setOnClickListener {
@@ -148,19 +155,28 @@ class DetailSongActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun showInfoSong(s: Song) {
         binding.nameMusic.text = s.title
         binding.creatorMusic.text = s.creator
         binding.timeMusic.text = Util.formatTime(MediaController.getDuration()!!.toLong())
-        Glide.with(binding.imageSong).load(s.bgImage)
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .error(R.drawable.logo_app_removebg)
-            .into(binding.imageSong)
+        val isLink = URLUtil.isValidUrl(s.bgImage)
+        if (!this.isDestroyed) {
+            if(!isLink){
+                binding.imageSong.setImageResource(R.drawable.logo_app_removebg)
+            }else{
+                Glide.with(binding.imageSong)
+                    .load(s.bgImage)
+                    .placeholder(R.drawable.logo_app_removebg)
+                    .into(binding.imageSong)
+            }
+        }
 
         val loop = sharedPrefControl.getMediaLoop(MEDIA_CURRENT_STATE_LOOP, MEDIA_LOOP_ALL)
         if (loop == MEDIA_LOOP_ONE) {
             binding.repeat.setImageResource(R.drawable.ic_repeat_once)
         }
+
         lifecycleScope.launch(Dispatchers.Main) {
             if (musicViewModel.findSongByName(s.title)) {
                 binding.love.setImageResource(R.drawable.ic_favorite_border)
@@ -168,29 +184,9 @@ class DetailSongActivity : AppCompatActivity() {
                 binding.love.setImageResource(R.drawable.ic_favorite)
             }
         }
-        initialiseSeekbar()
-    }
 
-
-    private fun initialiseSeekbar() {
-        seekBar.progress = 0
         seekBar.max = MediaController.getDuration()!!
         onSeekBarChange()
-        val handler = Handler()
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                if (!stopSeekbar) {
-                    try {
-                        binding.timeCurrentMusic.text = Util.formatTime(seekBar.progress.toLong())
-                        seekBar.progress = MediaController.getCurrentPosition()!!
-                        handler.postDelayed(this, 1000)
-                    } catch (e: Exception) {
-                        seekBar.progress = 0
-                    }
-                }
-            }
-        }, 0)
-
     }
 
     private fun onSeekBarChange() {
@@ -212,20 +208,18 @@ class DetailSongActivity : AppCompatActivity() {
         sendBroadcast(intentNext)
     }
 
-    private fun setStatusButton(isPlay: Int) {
+    private fun setStatusButton() {
+        val isPlay = MediaController.mediaState
         if (isPlay == Const.MEDIA_PLAYING) {
+            val animation: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_image)
+            binding.imageSong.startAnimation(animation)
             binding.playMusic.setImageResource(R.drawable.ic_pause)
-            addAnimation()
         } else {
             binding.playMusic.setImageResource(R.drawable.ic_play)
             binding.imageSong.clearAnimation()
         }
     }
 
-    private fun addAnimation(){
-        val fade1: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_image)
-        binding.imageSong.startAnimation(fade1)
-    }
 
     override fun onBackPressed() {
         super.onBackPressed()
