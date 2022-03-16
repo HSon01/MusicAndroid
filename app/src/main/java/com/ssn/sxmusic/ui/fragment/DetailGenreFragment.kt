@@ -45,7 +45,7 @@ class DetailGenreFragment : Fragment(), OnClickItem {
         binding.listMusic.adapter = musicAdapter
         binding.title.text = args.genre
         lifecycleScope.launch(Dispatchers.IO){
-            with(musicAdapter) { setData(MediaController.songs) }
+            musicAdapter.submitList(MediaController.songs)
         }
     }
 

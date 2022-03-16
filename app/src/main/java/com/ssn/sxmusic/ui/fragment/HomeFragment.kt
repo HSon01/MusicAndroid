@@ -45,7 +45,7 @@ class HomeFragment : Fragment(), OnClickItem {
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    musicAdapter.setData(it)
+                    musicAdapter.submitList(it)
                     MediaController.setListSong(it)
                 }
             }
