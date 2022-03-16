@@ -19,7 +19,9 @@ import com.ssn.sxmusic.util.OnClickItem
 import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), OnClickItem {
@@ -42,9 +44,12 @@ class SearchFragment : Fragment(), OnClickItem {
     private fun observerLivedata() {
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    searchAdapter.setData(it)
+                MainScope().launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        searchAdapter.submitList(it)
+                    }
                     MediaController.setListSong(it)
+                    searchAdapter.setData(it)
                 }
             }
         })

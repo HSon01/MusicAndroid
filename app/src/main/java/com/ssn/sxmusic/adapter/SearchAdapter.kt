@@ -12,15 +12,15 @@ import com.ssn.sxmusic.databinding.ItemmusicBinding
 import com.ssn.sxmusic.model.Song
 import com.ssn.sxmusic.util.OnClickItem
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchAdapter(val onClick: OnClickItem) :
     ListAdapter<Song, SearchAdapter.ViewHolder>(SearchDiff), Filterable {
-    private var songs: List<Song>? = null
+    private var songs: ArrayList<Song>? = null
 
 
     fun setData(list: ArrayList<Song>) {
         this.songs = list
-        submitList(list)
     }
 
 
