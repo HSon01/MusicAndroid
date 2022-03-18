@@ -12,6 +12,7 @@ fun setImage(Img: ImageView, link: String) {
         .load(link)
         .placeholder(R.mipmap.ic_launcher_round)
         .centerCrop()
+        .timeout(4000)
         .error(R.drawable.logo_app_removebg)
         .into(Img)
 }

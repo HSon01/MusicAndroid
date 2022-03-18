@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.ssn.sxmusic.databinding.ActivitySplashBinding
+import com.ssn.sxmusic.service.MusicService
 import com.ssn.sxmusic.vm.MusicViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun startHomeActivity() {
         lifecycleScope.launch {
+            startService()
             withContext(Dispatchers.Main) {
                 val intent = Intent(this@SplashActivity, HomeActivity::class.java)
                 startActivity(intent)
@@ -39,6 +41,11 @@ class SplashActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun startService() {
+        val intent = Intent(this, MusicService::class.java)
+        startService(intent)
+     }
 
     override fun onBackPressed() {} // Not allowed to operate
 }

@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -96,5 +97,24 @@ class MusicViewModel @Inject constructor(
                 }
             })
         }
+    }
+
+    fun searchMusics(text: String):List<Song> {
+        var list = arrayListOf<Song>()
+        try {
+            if (text.isEmpty()){
+                list = listMusic.value!!
+            }
+            listMusic.value?.forEach {
+                if (it.title.lowercase(Locale.getDefault()).trim()
+                        .startsWith(text)
+                ) {
+                    list.add(it)
+                }
+            }
+        }catch (e:Exception){
+            Log.d("AGT", "ERROR")
+        }
+        return list
     }
 }

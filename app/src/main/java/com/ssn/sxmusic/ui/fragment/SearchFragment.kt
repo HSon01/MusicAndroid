@@ -2,10 +2,12 @@ package com.ssn.sxmusic.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -44,23 +46,26 @@ class SearchFragment : Fragment(), OnClickItem {
     private fun observerLivedata() {
         musicViewModel.listMusic.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
-                MainScope().launch(Dispatchers.IO) {
-                    withContext(Dispatchers.Main) {
+                if(binding.searchMusic.query != null){
+                    MainScope().launch(Dispatchers.IO){
+                        MediaController.setListSong(it)
+                        Log.d("Tag","submitList 1")
                         searchAdapter.submitList(it)
                     }
-                    MediaController.setListSong(it)
-                    searchAdapter.setData(it)
                 }
             }
         })
 
     }
 
+
     private fun setupRecyclerview() {
         binding.listMusic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.listMusic.adapter = searchAdapter
         binding.searchMusic.setOnQueryTextListener(onQueryTextListener)
+
+
     }
 
     override fun onClickListener(Song: Song) {
@@ -77,20 +82,26 @@ class SearchFragment : Fragment(), OnClickItem {
     private val onQueryTextListener = object : SearchView.OnQueryTextListener,
         androidx.appcompat.widget.SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
-            lifecycleScope.launch(Dispatchers.Main) {
-                query.let {
-                    searchAdapter.filter.filter(it)
+            lifecycleScope.launch(Dispatchers.IO) {
+                query?.let {
+                    val l = musicViewModel.searchMusics(query)
+                    if(l.isEmpty()){
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(requireActivity().applicationContext,"Không tìm thầy bài hát này",Toast.LENGTH_LONG).show()
+                        }
+                    }else{
+                        MainScope().launch(Dispatchers.IO){
+                            searchAdapter.submitList(l)
+                            MediaController.setListSong(l)
+                            Log.d("Tag","submitList 2")
+                        }
+                    }
                 }
             }
             return false
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    newText.let {
-                        searchAdapter.filter.filter(it)
-                    }
-                }
             return true
         }
     }
